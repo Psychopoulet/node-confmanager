@@ -1,11 +1,11 @@
-# simpleconfig
+# node-confmanager
 A configuration manager
 
 
 ## Installation
 
 ```bash
-$ npm install simpleconfig
+$ npm install node-confmanager
 ```
 
 ## Features
@@ -31,9 +31,9 @@ $ npm install simpleconfig
 * ``` set(string key, mixed value) : return this ``` associate and remember a key with a value (may be recursive)
 * ``` delete(string key) : return this ``` forget a key and its value
 
-### simpleconfig
+### node-confmanager
 
-* ``` constructor([ string confPath = "simpleconfig/conf/conf.json" [, boolean spaces = false [, string recursionSeparator = "."] ] ] ) ``` spaces: add/remove spaces in the saved file
+* ``` constructor([ string confPath = "node-confmanager/conf/conf.json" [, boolean spaces = false [, string recursionSeparator = "."] ] ] ) ``` spaces: add/remove spaces in the saved file
 * ``` bindShortcut(string key, string shortkey) : return this ``` bind a shortcut for commandline
 * ``` deleteFile() : return Promise instance ``` delete the conf file
 * ``` fileExists() : return Promise instance => then(function(exists)) ``` check if the conf file exists
@@ -45,9 +45,9 @@ $ npm install simpleconfig
 ## Examples
 
 ```js
-const SimpleConfig = require('simpleconfig');
+const confmanager = require('node-confmanager');
 
-var Conf = new SimpleConfig(require('path').join(__dirname, 'conf.json'));
+var Conf = new confmanager(require('path').join(__dirname, 'conf.json'));
 
 Conf
   .bindSkeleton("debug", "boolean") // add skeleton (based on node-containerpattern) to check datatype
