@@ -1,6 +1,6 @@
 {
   "name": "node-confmanager",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A basic configuration manager",
   "main": "lib/main.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "url": "https://github.com/Psychopoulet/node-confmanager/issues"
   },
   "dependencies": {
-    "node-containerpattern": "^0.1.0"
+    "node-containerpattern": "^0.1.2"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
@@ -32,5 +32,6 @@
     "gulp-mocha": "^2.0.0",
     "gulp-plumber": "^1.0.0"
   },
-  "homepage": "https://github.com/Psychopoulet/node-confmanager#readme"
+  "homepage": "https://github.com/Psychopoulet/node-confmanager#readme",
+  "engines" : { "node" : ">=4.0.0" }
 }
