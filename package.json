@@ -23,7 +23,7 @@
     "url": "https://github.com/Psychopoulet/node-confmanager/issues"
   },
   "dependencies": {
-    "node-containerpattern": "^0.2.3"
+    "node-containerpattern": "^0.2.4"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
