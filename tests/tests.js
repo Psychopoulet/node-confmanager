@@ -5,54 +5,54 @@
 	const 	path = require("path"),
 			assert = require("assert"),
 
-			SimpleConfig = require(path.join(__dirname, "..", "lib", "main.js"));
+			NodeConfManager = require(path.join(__dirname, "..", "lib", "main.js"));
 
 // private
 
 	// attrs
 
-		var Conf = new SimpleConfig(path.join(__dirname, "conf.json"), true);
+		var Conf = new NodeConfManager(path.join(__dirname, "conf.json"), true);
 
 // tests
 
-describe("constructor", function() {
+describe("constructor", () => {
 
-	it("should check type value", function() {
-		assert.throws(function() { new SimpleConfig(false); }, Error, "check 'filePath' type value does not throw an error");
-		assert.throws(function() { new SimpleConfig("test", "test"); }, Error, "check 'spaces' type value does not throw an error");
-		assert.throws(function() { new SimpleConfig("test", false, false); }, Error, "check 'commandlineSeparator' type value does not throw an error");
+	it("should check type value", () => {
+		assert.throws(() => { new NodeConfManager(false); }, Error, "check 'filePath' type value does not throw an error");
+		assert.throws(() => { new NodeConfManager("test", "test"); }, Error, "check 'spaces' type value does not throw an error");
+		assert.throws(() => { new NodeConfManager("test", false, false); }, Error, "check 'commandlineSeparator' type value does not throw an error");
 	});
 
 });
 
-describe("bindShortcut", function() {
+describe("bindShortcut", () => {
 
-	before(function() { return Conf.clear().deleteFile(); });
-	beforeEach(function() { return Conf.clear(); });
-	after(function() { return Conf.clear().deleteFile(); });
+	before(() => { return Conf.clear().deleteFile(); });
+	beforeEach(() => { return Conf.clear(); });
+	after(() => { return Conf.clear().deleteFile(); });
 
-	it("should test wrong binds", function() {
+	it("should test wrong binds", () => {
 
-		assert.throws(function() { Conf.bindShortcut(false, "t"); }, Error, "check type value does not throw an error");
-		assert.throws(function() { Conf.bindShortcut("", "t"); }, Error, "check type value does not throw an error");
+		assert.throws(() => { Conf.bindShortcut(false, "t"); }, Error, "check type value does not throw an error");
+		assert.throws(() => { Conf.bindShortcut("", "t"); }, Error, "check type value does not throw an error");
 
 	});
 
-	it("should bind shortcut", function() {
-		assert.strictEqual(true, Conf.set("test", "test").bindShortcut("test", "t") instanceof SimpleConfig, "return data is not an instanceof SimpleConfig");
-		assert.strictEqual(true, Conf.set("test", "test").bindShortcut("TEST", "T") instanceof SimpleConfig, "return data is not an instanceof SimpleConfig");
+	it("should bind shortcut", () => {
+		assert.strictEqual(true, Conf.set("test", "test").bindShortcut("test", "t") instanceof NodeConfManager, "return data is not an instanceof NodeConfManager");
+		assert.strictEqual(true, Conf.set("test", "test").bindShortcut("TEST", "T") instanceof NodeConfManager, "return data is not an instanceof NodeConfManager");
 	});
 
 });
 
-describe("save", function() {
+describe("save", () => {
 
-	before(function() { return Conf.clear().deleteFile(); });
-	after(function() { return Conf.clear().deleteFile(); });
+	before(() => { return Conf.clear().deleteFile(); });
+	after(() => { return Conf.clear().deleteFile(); });
 
-	it("should save a configuration", function() {
+	it("should save a configuration", () => {
 
-		return Conf.fileExists().then(function(exists) {
+		return Conf.fileExists().then((exists) => {
 
 			assert.strictEqual(false, exists, "check file existance failed");
 
@@ -74,15 +74,15 @@ describe("save", function() {
 
 });
 
-describe("load", function() {
+describe("load", () => {
 
-	before(function() { return Conf.clear().bindSkeleton("debug", "boolean").deleteFile(); });
-	beforeEach(function() { Conf.clearData(); });
-	after(function() { return Conf.clear().deleteFile(); });
+	before(() => { return Conf.clear().bindSkeleton("debug", "boolean").deleteFile(); });
+	beforeEach(() => { Conf.clearData().clearLimits(); });
+	after(() => { return Conf.clear().deleteFile(); });
 
-	it("should load a configuration with successive promises", function() {
+	it("should load a configuration with successive promises", () => {
 
-		return Conf.fileExists().then(function(exists) {
+		return Conf.fileExists().then((exists) => {
 
 			assert.strictEqual(false, exists, "check file existance failed");
 
@@ -91,26 +91,38 @@ describe("load", function() {
 						.set("authors", [ "author1", "author2" ])
 						.save();
 
-		}).then(function() {
+		}).then(() => {
 			return Conf.load();
-		}).then(function() {
+		}).then(() => {
 
 			assert.strictEqual(false, Conf.get("debug"), "check 'debug' loaded data failed");
 			assert.strictEqual(3, Conf.size, "check 'size' loaded data failed");
 
 			return Conf.fileExists();
 
-		}).then(function(exists) {
+		}).then((exists) => {
 			assert.strictEqual(true, exists, "check file existance failed");
 		});
 
 	});
 
-	describe("from console first", function() {
+	it("should load a configuration with limit", () => {
 
-		beforeEach(function() { Conf.clearData(); });
+		Conf.limit("debug", [ true, false ]);
 
-		it("should load", function() {
+		return Conf.load().then(() => {
+			assert.strictEqual(false, true, "'debug' limit data failed");
+		}).catch(() => {
+			return Promise.resolve();
+		});
+
+	});
+
+	describe("from console first", () => {
+
+		beforeEach(() => { Conf.clearData(); });
+
+		it("should load", () => {
 
 			process.argv.push("--debug", "true");
 			process.argv.push("--test", "test2");
@@ -118,7 +130,7 @@ describe("load", function() {
 			return Conf .set("usr", { login : "login", pwd : "pwd" })
 						.set("debug", "n")
 						.set("authors", [ "author1", "author2" ]).load()
-			.then(function() {
+			.then(() => {
 				assert.strictEqual(true, Conf.get("debug"), "check loaded data failed (debug)");
 				assert.strictEqual("test2", Conf.get("test"), "check loaded data failed (test)");
 				assert.strictEqual(4, Conf.size, "check loaded data failed (size)");
@@ -126,7 +138,7 @@ describe("load", function() {
 
 		});
 
-		it("should load with shortcuts", function() {
+		it("should load with shortcuts", () => {
 
 			Conf.bindShortcut("debug", "d").bindShortcut("test", "t");
 
@@ -136,7 +148,7 @@ describe("load", function() {
 			return Conf .set("usr", { login : "login", pwd : "pwd" })
 						.set("debug", "n")
 						.set("authors", [ "author1", "author2" ]).load()
-			.then(function() {
+			.then(() => {
 				assert.strictEqual(true, Conf.get("debug"), "check loaded data failed (debug)");
 				assert.strictEqual("test2", Conf.get("test"), "check loaded data failed (test)");
 				assert.strictEqual(4, Conf.size, "check loaded data failed (size)");
@@ -144,14 +156,14 @@ describe("load", function() {
 
 		});
 
-		it("should load with recursive data", function() {
+		it("should load with recursive data", () => {
 
 			process.argv.push("--usr.login", "login2", "--lvl1.lvl2.lvl3", "test");
 
 			return Conf .set("usr", { login : "login", pwd : "pwd" })
 						.set("debug", "n")
 						.set("authors", [ "author1", "author2" ]).load()
-			.then(function() {
+			.then(() => {
 				assert.strictEqual(true, Conf.get("debug"), "check loaded data failed (debug)");
 				assert.strictEqual("login2", Conf.get("usr").login, "check loaded data failed (usr.login)");
 				assert.strictEqual("test", Conf.get("lvl1.lvl2.lvl3"), "check loaded data failed (usr.login)");
@@ -164,23 +176,23 @@ describe("load", function() {
 
 });
 
-describe("set", function() {
+describe("set", () => {
 
-	before(function() { return Conf.clear().deleteFile(); });
-	after(function() { return Conf.clear().deleteFile(); });
+	before(() => { return Conf.clear().deleteFile(); });
+	after(() => { return Conf.clear().deleteFile(); });
 
-	it("should set a value", function() {
-		assert.throws(function() { Conf.set(15); }, Error, "check type value does not throw an error");
+	it("should set a value", () => {
+		assert.throws(() => { Conf.set(15); }, Error, "check type value does not throw an error");
 	});
 
 });
 
-describe("get", function() {
+describe("get", () => {
 
-	before(function() { return Conf.clear().deleteFile(); });
-	after(function() { return Conf.clear().deleteFile(); });
+	before(() => { return Conf.clear().deleteFile(); });
+	after(() => { return Conf.clear().deleteFile(); });
 
-	it("should get a value", function() {
+	it("should get a value", () => {
 
 		Conf.set("usr", { login : "login", pwd : "pwd" });
 
