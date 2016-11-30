@@ -22,19 +22,25 @@ see the [node-containerpattern](https://www.npmjs.com/package/node-containerpatt
 
 ### node-confmanager
 
-* ``` constructor([ string confPath = "node-confmanager/conf/conf.json" [, boolean spaces = false [, string recursionSeparator = "."] ] ] ) ``` spaces: add/remove spaces in the saved file
+  -- Attributes --
 
-* ``` string filePath ``` declared file for documentation saving/loading
-* ``` boolean spaces ``` add spaces to saved file
-* ``` array shortcuts ``` shortcuts for commandline call
+  * ``` string filePath ``` declared file for documentation saving/loading
+  * ``` boolean spaces ``` add spaces to saved file
+  * ``` array shortcuts ``` shortcuts for commandline call
 
-* ``` bindShortcut(string key, string shortkey) : return this ``` bind a shortcut for commandline
-* ``` deleteFile() : return Promise instance ``` delete the conf file
-* ``` fileExists() : return Promise instance => then(function(exists)) ``` check if the conf file exists
-* ``` clearShortcuts() : return this ``` forget all the shortcuts
-* ``` clear() : return this ``` node-containerpattern.clear & clearShortcuts
-* ``` load() : return Promise instance ``` load data from conf file then commandline (commandline takeover)
-* ``` save() : return Promise instance ``` save data into conf file
+  -- Constructor --
+
+  * ``` constructor([ string confPath = "node-confmanager/conf/conf.json" [, boolean spaces = false [, string recursionSeparator = "."] ] ] ) ``` spaces: add/remove spaces in the saved file
+
+  -- Methods --
+
+  * ``` bindShortcut(string key, string shortkey) : return this ``` bind a shortcut for commandline
+  * ``` deleteFile() : return Promise instance ``` delete the conf file
+  * ``` fileExists() : return Promise instance => then((exists) => {}) ``` check if the conf file exists
+  * ``` clearShortcuts() : return this ``` forget all the shortcuts
+  * ``` clear() : return this ``` node-containerpattern.clear & clearShortcuts
+  * ``` load() : return Promise instance ``` load data from conf file then commandline (commandline takeover)
+  * ``` save() : return Promise instance ``` save data into conf file
 
 ## Examples
 
@@ -49,7 +55,7 @@ Conf
   .bindShortcut('usr.login', 'ul')
   .bindShortcut('usr.password', 'up');
 
-Conf.fileExists().then(function(exists) {
+Conf.fileExists().then((exists) => {
   
   if (exists) {
     return Promise.resolve();
@@ -64,18 +70,18 @@ Conf.fileExists().then(function(exists) {
 
   }
 
-}).then(function() {
+}).then(() => {
 
   // can add "--usr.login login2" or "-ul login2" to commandline to force login change
   return Conf.load();
 
-}).then(function(conf) {
+}).then((conf) => {
 
     console.log(conf);
     console.log(Conf.get('debug'));
     console.log(Conf.get('usr.login'));
 
-}).catch(function(err) { console.log(err); });
+}).catch((err) => { console.log(err); });
 ```
 
 ## Tests
