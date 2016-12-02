@@ -1,6 +1,6 @@
 {
   "name": "node-confmanager",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "A basic configuration manager",
   "main": "lib/main.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "url": "https://github.com/Psychopoulet/node-confmanager/issues"
   },
   "dependencies": {
-    "node-containerpattern": "^0.3.0"
+    "node-containerpattern": "^0.3.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
