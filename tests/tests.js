@@ -2,10 +2,10 @@
 
 // deps
 
-	const 	path = require("path"),
-			assert = require("assert"),
+	const path = require("path");
+	const assert = require("assert");
 
-			NodeConfManager = require(path.join(__dirname, "..", "lib", "main.js"));
+	const NodeConfManager = require(path.join(__dirname, "..", "lib", "main.js"));
 
 // private
 
@@ -76,7 +76,7 @@ describe("save", () => {
 
 describe("load", () => {
 
-	before(() => { return Conf.clear().bindSkeleton("debug", "boolean").deleteFile(); });
+	before(() => { return Conf.clear().skeleton("debug", "boolean").deleteFile(); });
 	beforeEach(() => { Conf.clearData().clearLimits(); });
 	after(() => { return Conf.clear().deleteFile(); });
 
