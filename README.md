@@ -34,13 +34,13 @@ see the [node-containerpattern](https://www.npmjs.com/package/node-containerpatt
 
   -- Methods --
 
-  * ``` bindShortcut(string key, string shortkey) : return this ``` bind a shortcut for commandline
   * ``` deleteFile() : return Promise instance ``` delete the conf file
   * ``` fileExists() : return Promise instance => then((exists) => {}) ``` check if the conf file exists
   * ``` clearShortcuts() : return this ``` forget all the shortcuts
   * ``` clear() : return this ``` node-containerpattern.clear & clearShortcuts
   * ``` load() : return Promise instance ``` load data from conf file then commandline (commandline takeover)
   * ``` save() : return Promise instance ``` save data into conf file
+  * ``` shortcut(string key, string shortkey) : return this ``` bind a shortcut for commandline
 
 ## Examples
 
@@ -50,10 +50,10 @@ const confmanager = require('node-confmanager');
 var Conf = new confmanager(require('path').join(__dirname, 'conf.json'));
 
 Conf
-  .bindSkeleton("debug", "boolean") // add skeleton (based on [node-containerpattern](https://www.npmjs.com/package/node-containerpattern)) to check datatype
-  .bindShortcut('debug', 'd') // add shortcut to simply use comandline params, can add "-d true" to commandline to activate debug
-  .bindShortcut('usr.login', 'ul')
-  .bindShortcut('usr.password', 'up');
+  .skeleton("debug", "boolean") // add skeleton (based on [node-containerpattern](https://www.npmjs.com/package/node-containerpattern)) to check datatype
+  .shortcut('debug', 'd') // add shortcut to simply use comandline params, can add "-d true" to commandline to activate debug
+  .shortcut('usr.login', 'ul')
+  .shortcut('usr.password', 'up');
 
 Conf.fileExists().then((exists) => {
   

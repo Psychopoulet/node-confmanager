@@ -1,11 +1,11 @@
 {
   "name": "node-confmanager",
-  "version": "0.4.3",
-  "description": "A basic configuration manager",
+  "version": "0.5.0",
+  "description": "A configuration manager",
   "main": "lib/main.js",
   "scripts": {
     "start": "node lib/main.js",
-    "test": "npm update && gulp"
+    "test": "npm update && gulp mocha"
   },
   "repository": {
     "type": "git",
@@ -23,14 +23,16 @@
     "url": "https://github.com/Psychopoulet/node-confmanager/issues"
   },
   "dependencies": {
-    "node-containerpattern": "^0.3.2"
+    "node-containerpattern": "^0.4.1"
   },
   "devDependencies": {
+
     "gulp": "^3.9.1",
-    "gulp-eslint": "^2.1.0",
-    "gulp-exclude-gitignore": "^1.0.0",
-    "gulp-mocha": "^2.2.0",
-    "gulp-plumber": "^1.1.0"
+    "gulp-plumber": "^1.1.0",
+
+    "gulp-eslint": "^3.0.1",
+    "gulp-mocha": "^4.3.1"
+
   },
   "homepage": "https://github.com/Psychopoulet/node-confmanager#readme",
   "engines" : { "node" : ">=4.0.0" }
