@@ -2,10 +2,10 @@
 
 // deps
 
-	const 	path = require("path"),
-			assert = require("assert"),
+	const path = require("path");
+	const assert = require("assert");
 
-			NodeConfManager = require(path.join(__dirname, "..", "lib", "main.js"));
+	const NodeConfManager = require(path.join(__dirname, "..", "lib", "main.js"));
 
 // private
 
@@ -76,7 +76,7 @@ describe("save", () => {
 
 describe("load", () => {
 
-	before(() => { return Conf.clear().bindSkeleton("debug", "boolean").deleteFile(); });
+	before(() => { return Conf.clear().skeleton("debug", "boolean").deleteFile(); });
 	beforeEach(() => { Conf.clearData().clearLimits(); });
 	after(() => { return Conf.clear().deleteFile(); });
 
@@ -96,7 +96,7 @@ describe("load", () => {
 		}).then(() => {
 
 			assert.strictEqual(false, Conf.get("debug"), "check 'debug' loaded data failed");
-			assert.strictEqual(3, Conf.size, "check 'size' loaded data failed");
+			assert.strictEqual(4, Conf.size, "check 'size' loaded data failed"); // not 3 because of mocha's option "--colors --reporter=spec" set by command line
 
 			return Conf.fileExists();
 
@@ -133,7 +133,7 @@ describe("load", () => {
 			.then(() => {
 				assert.strictEqual(true, Conf.get("debug"), "check loaded data failed (debug)");
 				assert.strictEqual("test2", Conf.get("test"), "check loaded data failed (test)");
-				assert.strictEqual(4, Conf.size, "check loaded data failed (size)");
+				assert.strictEqual(5, Conf.size, "check loaded data failed (size)"); // not 4 because of mocha's option "--colors --reporter=spec" set by command line
 			});
 
 		});
@@ -151,7 +151,7 @@ describe("load", () => {
 			.then(() => {
 				assert.strictEqual(true, Conf.get("debug"), "check loaded data failed (debug)");
 				assert.strictEqual("test2", Conf.get("test"), "check loaded data failed (test)");
-				assert.strictEqual(4, Conf.size, "check loaded data failed (size)");
+				assert.strictEqual(5, Conf.size, "check loaded data failed (size)"); // not 4 because of mocha's option "--colors --reporter=spec" set by command line
 			});
 
 		});
@@ -167,7 +167,7 @@ describe("load", () => {
 				assert.strictEqual(true, Conf.get("debug"), "check loaded data failed (debug)");
 				assert.strictEqual("login2", Conf.get("usr").login, "check loaded data failed (usr.login)");
 				assert.strictEqual("test", Conf.get("lvl1.lvl2.lvl3"), "check loaded data failed (usr.login)");
-				assert.strictEqual(5, Conf.size, "check loaded data failed (size)");
+				assert.strictEqual(6, Conf.size, "check loaded data failed (size)"); // not 5 because of mocha's option "--colors --reporter=spec" set by command line
 			});
 
 		});
