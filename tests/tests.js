@@ -25,7 +25,7 @@ describe("constructor", () => {
 
 });
 
-describe("bindShortcut", () => {
+describe("shortcut", () => {
 
 	before(() => { return Conf.clear().deleteFile(); });
 	beforeEach(() => { return Conf.clear(); });
@@ -33,14 +33,14 @@ describe("bindShortcut", () => {
 
 	it("should test wrong binds", () => {
 
-		assert.throws(() => { Conf.bindShortcut(false, "t"); }, Error, "check type value does not throw an error");
-		assert.throws(() => { Conf.bindShortcut("", "t"); }, Error, "check type value does not throw an error");
+		assert.throws(() => { Conf.shortcut(false, "t"); }, Error, "check type value does not throw an error");
+		assert.throws(() => { Conf.shortcut("", "t"); }, Error, "check type value does not throw an error");
 
 	});
 
 	it("should bind shortcut", () => {
-		assert.strictEqual(true, Conf.set("test", "test").bindShortcut("test", "t") instanceof NodeConfManager, "return data is not an instanceof NodeConfManager");
-		assert.strictEqual(true, Conf.set("test", "test").bindShortcut("TEST", "T") instanceof NodeConfManager, "return data is not an instanceof NodeConfManager");
+		assert.strictEqual(true, Conf.set("test", "test").shortcut("test", "t") instanceof NodeConfManager, "return data is not an instanceof NodeConfManager");
+		assert.strictEqual(true, Conf.set("test", "test").shortcut("TEST", "T") instanceof NodeConfManager, "return data is not an instanceof NodeConfManager");
 	});
 
 });
@@ -140,7 +140,7 @@ describe("load", () => {
 
 		it("should load with shortcuts", () => {
 
-			Conf.bindShortcut("debug", "d").bindShortcut("test", "t");
+			Conf.shortcut("debug", "d").shortcut("test", "t");
 
 			process.argv.push("-d", "true");
 			process.argv.push("-t", "test2");
