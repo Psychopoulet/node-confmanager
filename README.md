@@ -1,6 +1,9 @@
 # node-confmanager
 A configuration manager
 
+[![Build Status](https://api.travis-ci.org/Psychopoulet/node-confmanager.svg?branch=master)](https://travis-ci.org/Psychopoulet/node-confmanager)
+[![Coverage Status](https://coveralls.io/repos/github/Psychopoulet/node-confmanager/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/node-confmanager)
+[![Dependency Status](https://img.shields.io/david/Psychopoulet/node-confmanager/master.svg)](https://github.com/Psychopoulet/node-confmanager)
 
 ## Installation
 
@@ -87,7 +90,7 @@ Conf.fileExists().then((exists) => {
 ## Tests
 
 ```bash
-$ gulp
+$ gulp tests
 ```
 
 ## License

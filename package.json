@@ -5,7 +5,7 @@
   "main": "lib/main.js",
   "scripts": {
     "start": "node lib/main.js",
-    "test": "npm update && gulp mocha"
+    "tests": "gulp tests"
   },
   "pre-commit": [
     "test"
@@ -16,9 +16,18 @@
   },
   "keywords": [
     "node",
-    "conf", "config", "configuration",
-    "manage", "save", "load",
-    "Map", "recursive", "skeleton", "structure", "pattern", "container"
+    "conf",
+    "config",
+    "configuration",
+    "manage",
+    "save",
+    "load",
+    "Map",
+    "recursive",
+    "skeleton",
+    "structure",
+    "pattern",
+    "container"
   ],
   "author": "Sébastien VIDAL",
   "license": "ISC",
@@ -26,19 +35,19 @@
     "url": "https://github.com/Psychopoulet/node-confmanager/issues"
   },
   "dependencies": {
-    "node-containerpattern": "^0.4.2"
+    "node-containerpattern": "0.5.1"
   },
   "devDependencies": {
-
-    "gulp": "^3.9.1",
-    "gulp-plumber": "^1.1.0",
-
-    "gulp-eslint": "^3.0.1",
-    "gulp-mocha": "^4.3.1",
-    
-    "pre-commit": "^1.2.2"
-
+    "gulp": "3.9.1",
+    "gulp-plumber": "1.1.0",
+    "gulp-eslint": "4.0.0",
+    "gulp-mocha": "3.0.1",
+    "gulp-istanbul": "1.1.2",
+    "gulp-coveralls": "0.1.4",
+    "pre-commit": "1.2.2"
   },
   "homepage": "https://github.com/Psychopoulet/node-confmanager#readme",
-  "engines" : { "node" : ">=4.0.0" }
+  "engines": {
+    "node": ">=4.0.0"
+  }
 }
