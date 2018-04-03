@@ -87,6 +87,14 @@ Conf.fileExists().then((exists) => {
 }).catch((err) => { console.log(err); });
 ```
 
+```bash
+node mysoft.js -d
+node mysoft.js --debug
+node mysoft.js --debug "true"
+node mysoft.js --debug "yes"
+node mysoft.js --debug "y"
+```
+
 ## Tests
 
 ```bash
