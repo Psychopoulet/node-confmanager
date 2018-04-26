@@ -25,15 +25,9 @@ see the [node-containerpattern](https://www.npmjs.com/package/node-containerpatt
 
 ### node-confmanager
 
-  -- Attributes --
-
-  * ``` string filePath ``` declared file for documentation saving/loading
-  * ``` boolean spaces ``` add spaces to saved file
-  * ``` array shortcuts ``` shortcuts for commandline call
-
   -- Constructor --
 
-  * ``` constructor([ string confPath = "node-confmanager/conf/conf.json" [, boolean spaces = false [, string recursionSeparator = "."] ] ] ) ``` spaces: add/remove spaces in the saved file
+  * ``` constructor(confPath: string, spaces?: boolean, recursionSeparator?: string) ```
 
   -- Methods --
 
@@ -47,45 +41,76 @@ see the [node-containerpattern](https://www.npmjs.com/package/node-containerpatt
 
 ## Examples
 
-```js
-const confmanager = require('node-confmanager');
+### Native
 
-var Conf = new confmanager(require('path').join(__dirname, 'conf.json'));
+```javascript
+const ConfManager = require("node-confmanager");
 
-Conf
+const conf = new ConfManager(require("path").join(__dirname, "conf.json"));
+
+conf
   .skeleton("debug", "boolean") // add skeleton (based on [node-containerpattern](https://www.npmjs.com/package/node-containerpattern)) to check datatype
-  .shortcut('debug', 'd') // add shortcut to simply use comandline params, can add "-d true" to commandline to activate debug
-  .shortcut('usr.login', 'ul')
-  .shortcut('usr.password', 'up');
+  .shortcut("debug", "d") // add shortcut to simply use comandline params, can add "-d true" to commandline to activate debug
+  .shortcut("usr.login", "ul")
+  .shortcut("usr.password", "up");
 
-Conf.fileExists().then((exists) => {
+conf.fileExists().then((exists) => {
   
-  if (exists) {
-    return Promise.resolve();
-  }
-  else {
-
-    // default config sample
-    return Conf .set('usr', { login : 'login', pwd : 'pwd' })
-                .set('debug', false)
-                .set('prod', 'n') // = false
-                .save();
-
-  }
+  return exists ? Promise.resolve() : Conf.set("usr", { login : "login", pwd : "pwd" })
+      .set("debug", false)
+      .set("prod", "n") // = false
+      .save();
 
 }).then(() => {
 
   // can add "--usr.login login2" or "-ul login2" to commandline to force login change
+  return conf.load();
+
+}).then(() => {
+
+    console.log(conf.get("debug"));
+    console.log(conf.get("usr.login"));
+
+}).catch((err) => {
+  console.log(err);
+});
+```
+
+### Typescript
+
+```typescript
+import ConfManager = require("node-confmanager");
+import { join } from "path";
+
+const Conf = new ConfManager(join(__dirname, "conf.json"));
+
+Conf
+  .skeleton("debug", "boolean").shortcut("debug", "d")
+  .shortcut("usr.login", "ul")
+  .shortcut("usr.password", "up");
+
+Conf.fileExists().then((exists: boolean) => {
+
+  return exists ? Promise.resolve() : Conf.set("usr", { login : "login", pwd : "pwd" })
+      .set("debug", false)
+      .set("prod", "n") // = false
+      .save();
+
+}).then(() => {
+
   return Conf.load();
 
-}).then((conf) => {
+}).then(() => {
 
-    console.log(conf);
-    console.log(Conf.get('debug'));
-    console.log(Conf.get('usr.login'));
+    console.log(Conf.get("debug"));
+    console.log(Conf.get("usr.login"));
 
-}).catch((err) => { console.log(err); });
+}).catch((err: Error) => {
+  console.log(err);
+});
 ```
+
+### Run
 
 ```bash
 node mysoft.js -d

@@ -19,16 +19,24 @@ describe("constructor", () => {
 	it("should check type value", () => {
 
 		assert.throws(() => {
+			new NodeConfManager().clear();
+		}, ReferenceError, "check 'filePath' type value does not throw an error");
+
+		assert.throws(() => {
 			new NodeConfManager(false).clear();
+		}, TypeError, "check 'filePath' type value does not throw an error");
+
+		assert.throws(() => {
+			new NodeConfManager("").clear();
 		}, Error, "check 'filePath' type value does not throw an error");
 
 		assert.throws(() => {
 			new NodeConfManager("test", "test").clear();
-		}, Error, "check 'spaces' type value does not throw an error");
+		}, TypeError, "check 'spaces' type value does not throw an error");
 
 		assert.throws(() => {
 			new NodeConfManager("test", false, false).clear();
-		}, Error, "check 'commandlineSeparator' type value does not throw an error");
+		}, TypeError, "check 'commandlineSeparator' type value does not throw an error");
 
 	});
 
@@ -36,10 +44,16 @@ describe("constructor", () => {
 
 describe("shortcut", () => {
 
-	const Conf = new NodeConfManager();
+	const Conf = new NodeConfManager(CONF_FILE);
 
 	before(() => {
-		return Conf.clear().deleteFile();
+
+		return Promise.resolve().then(() => {
+			return Conf.clear().deleteFile();
+		}).catch((err) => {
+			(0, console).log(err);
+			return Promise.reject(err);
+		});
 	});
 
 	beforeEach(() => {
@@ -201,7 +215,7 @@ describe("load", () => {
 
 	describe("from console first", () => {
 
-		const Conf = new NodeConfManager();
+		const Conf = new NodeConfManager(CONF_FILE);
 		const argv = clone(process.argv);
 
 		before(() => {
