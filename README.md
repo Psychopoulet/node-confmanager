@@ -3,7 +3,8 @@ A configuration manager
 
 [![Build Status](https://api.travis-ci.org/Psychopoulet/node-confmanager.svg?branch=master)](https://travis-ci.org/Psychopoulet/node-confmanager)
 [![Coverage Status](https://coveralls.io/repos/github/Psychopoulet/node-confmanager/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/node-confmanager)
-[![Dependency Status](https://img.shields.io/david/Psychopoulet/node-confmanager/master.svg)](https://github.com/Psychopoulet/node-confmanager)
+[![Dependency Status](https://david-dm.org/Psychopoulet/node-confmanager/status.svg)](https://david-dm.org/Psychopoulet/node-confmanager)
+[![Dev dependency Status](https://david-dm.org/Psychopoulet/node-confmanager/dev-status.svg)](https://david-dm.org/Psychopoulet/node-confmanager?type=dev)
 
 ## Installation
 
