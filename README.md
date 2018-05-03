@@ -1,10 +1,12 @@
 # node-confmanager
 A configuration manager
 
-[![Build Status](https://api.travis-ci.org/Psychopoulet/node-confmanager.svg?branch=master)](https://travis-ci.org/Psychopoulet/node-confmanager)
-[![Coverage Status](https://coveralls.io/repos/github/Psychopoulet/node-confmanager/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/node-confmanager)
-[![Dependency Status](https://david-dm.org/Psychopoulet/node-confmanager/status.svg)](https://david-dm.org/Psychopoulet/node-confmanager)
-[![Dev dependency Status](https://david-dm.org/Psychopoulet/node-confmanager/dev-status.svg)](https://david-dm.org/Psychopoulet/node-confmanager?type=dev)
+[![Build status](https://api.travis-ci.org/Psychopoulet/node-confmanager.svg?branch=master)](https://travis-ci.org/Psychopoulet/node-confmanager)
+[![Coverage status](https://coveralls.io/repos/github/Psychopoulet/node-confmanager/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/node-confmanager)
+[![Dependency status](https://david-dm.org/Psychopoulet/node-confmanager/status.svg)](https://david-dm.org/Psychopoulet/node-confmanager)
+[![Dev dependency status](https://david-dm.org/Psychopoulet/node-confmanager/dev-status.svg)](https://david-dm.org/Psychopoulet/node-confmanager?type=dev)
+[![Issues](https://img.shields.io/github/issues/Psychopoulet/node-confmanager.svg)](https://github.com/Psychopoulet/node-confmanager/issues)
+[![Pull requests](https://img.shields.io/github/issues-pr/Psychopoulet/node-confmanager.svg)](https://github.com/Psychopoulet/node-confmanager/pulls)
 
 ## Installation
 
@@ -28,7 +30,7 @@ see the [node-containerpattern](https://www.npmjs.com/package/node-containerpatt
 
   -- Constructor --
 
-  * ``` constructor(confPath: string, spaces?: boolean, recursionSeparator?: string) ```
+  * ``` constructor(confPath?: string, spaces?: boolean, recursionSeparator?: string) ```
 
   -- Methods --
 

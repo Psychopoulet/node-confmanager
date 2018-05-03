@@ -16,11 +16,7 @@
 
 describe("constructor", () => {
 
-	it("should check type value", () => {
-
-		assert.throws(() => {
-			new NodeConfManager().clear();
-		}, ReferenceError, "check 'filePath' type value does not throw an error");
+	it("should check filePath", () => {
 
 		assert.throws(() => {
 			new NodeConfManager(false).clear();
@@ -30,13 +26,25 @@ describe("constructor", () => {
 			new NodeConfManager("").clear();
 		}, Error, "check 'filePath' type value does not throw an error");
 
+	});
+
+	it("should check spaces", () => {
+
 		assert.throws(() => {
 			new NodeConfManager("test", "test").clear();
 		}, TypeError, "check 'spaces' type value does not throw an error");
 
+	});
+
+	it("should check recursionSeparator", () => {
+
 		assert.throws(() => {
 			new NodeConfManager("test", false, false).clear();
-		}, TypeError, "check 'commandlineSeparator' type value does not throw an error");
+		}, TypeError, "check 'recursionSeparator' type value does not throw an error");
+
+		assert.throws(() => {
+			new NodeConfManager("test", false, "").clear();
+		}, Error, "check 'recursionSeparator' type value does not throw an error");
 
 	});
 
@@ -88,6 +96,70 @@ describe("shortcut", () => {
 			Conf.set("test", "test").shortcut("TEST", "T") instanceof NodeConfManager, true,
 			"return data is not an instanceof NodeConfManager"
 		);
+
+	});
+
+});
+
+describe("deleteFile", () => {
+
+	after(() => {
+		return new NodeConfManager().clear().deleteFile();
+	});
+
+	it("should delete file without file", () => {
+		return new NodeConfManager().deleteFile();
+	});
+
+	it("should delete file with file", () => {
+		return new NodeConfManager(CONF_FILE).deleteFile();
+	});
+
+	it("should delete file with saved file", () => {
+
+		const Conf = new NodeConfManager(CONF_FILE);
+
+		return Conf.save().then(() => {
+			return Conf.deleteFile();
+		});
+
+	});
+
+});
+
+describe("fileExists", () => {
+
+	after(() => {
+		return new NodeConfManager().clear().deleteFile();
+	});
+
+	it("should check file existance without file", () => {
+
+		return new NodeConfManager().fileExists().then((exists) => {
+			assert.strictEqual(exists, false, "check file existance failed"); return Promise.resolve();
+		});
+
+	});
+
+	it("should check file existance with file", () => {
+
+		return new NodeConfManager(CONF_FILE).fileExists().then((exists) => {
+			assert.strictEqual(exists, false, "check file existance failed"); return Promise.resolve();
+		});
+
+	});
+
+	it("should check file existance with saved file", () => {
+
+		const Conf = new NodeConfManager(CONF_FILE);
+
+		return Conf.save().then(() => {
+
+			return Conf.fileExists().then((exists) => {
+				assert.strictEqual(exists, true, "check file existance failed"); return Promise.resolve();
+			});
+
+		});
 
 	});
 
@@ -145,9 +217,17 @@ describe("save", () => {
 
 	});
 
+	it("should save a configuration without file", () => {
+		Conf._filePath = ""; return Conf.save();
+	});
+
 });
 
 describe("load", () => {
+
+	it("should load a configuration without file", () => {
+		return new NodeConfManager().load();
+	});
 
 	describe("from file", () => {
 
