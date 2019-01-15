@@ -2,9 +2,11 @@
 
 // deps
 
+	// natives
 	const { join } = require("path");
 	const { strictEqual } = require("assert");
 
+	// locals
 	const fileExists = require(join(__dirname, "..", "lib", "fileExists.js"));
 
 // consts

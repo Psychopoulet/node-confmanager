@@ -2,9 +2,11 @@
 
 // deps
 
+	// natives
 	const { join } = require("path");
 	const { strictEqual } = require("assert");
 
+	// locals
 	const clone = require(join(__dirname, "..", "lib", "clone.js"));
 
 // tests
