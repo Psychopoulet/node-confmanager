@@ -2,9 +2,11 @@
 
 // deps
 
+	// natives
 	const { join } = require("path");
 	const { rmdir } = require("fs");
 
+	// locals
 	const mkdirp = require(join(__dirname, "..", "lib", "mkdirp.js"));
 
 // consts

@@ -126,7 +126,7 @@ node mysoft.js --debug "y"
 ## Tests
 
 ```bash
-$ gulp tests
+$ npm run-script tests
 ```
 
 ## License

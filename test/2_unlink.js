@@ -2,10 +2,12 @@
 
 // deps
 
+	// natives
 	const { join } = require("path");
 	const { writeFile } = require("fs");
 	const { strictEqual } = require("assert");
 
+	// locals
 	const unlink = require(join(__dirname, "..", "lib", "unlink.js"));
 
 // consts
