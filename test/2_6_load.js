@@ -89,15 +89,37 @@ describe("load", () => {
 	describe("from console first", () => {
 
 		const Conf = new NodeConfManager(CONF_FILE);
-		const argv = clone(process.argv);
+		const argv = clone((0, process).argv);
 
 		before(() => {
-			return Conf.clear().skeleton("debug", "boolean").shortcut("debug", "d").shortcut("test", "t");
+
+			return Conf.clear()
+				.skeleton("debug", "boolean").shortcut("debug", "d")
+				.skeleton("test", "string").shortcut("test", "t").limit("test", [ "test", "test2" ]);
+
 		});
 
 		beforeEach(() => {
-			process.argv = clone(argv);
+			(0, process).argv = clone(argv);
 			Conf.clearData();
+		});
+
+		it("should not load", (done) => {
+
+			(0, process).argv.push("--debug", "this is a test");
+			(0, process).argv.push("--test", "this is a test");
+
+			Conf.load().then(() => {
+				done(new Error("Does not generate an error"));
+			}).catch((err) => {
+
+				assert.strictEqual(typeof err, "object", "Generated error is not an object");
+				assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+
+				done();
+
+			});
+
 		});
 
 		it("should load", () => {
@@ -128,8 +150,8 @@ describe("load", () => {
 
 			}).then(() => {
 
-				process.argv.push("--debug", "true");
-				process.argv.push("--test", "test2");
+				(0, process).argv.push("--debug", "true");
+				(0, process).argv.push("--test", "test2");
 
 				return Conf.load();
 
@@ -175,8 +197,8 @@ describe("load", () => {
 
 			}).then(() => {
 
-				process.argv.push("-d", "true");
-				process.argv.push("-t", "test2");
+				(0, process).argv.push("-d", "true");
+				(0, process).argv.push("-t", "test2");
 
 				return Conf.load();
 
@@ -210,7 +232,7 @@ describe("load", () => {
 
 			}).then(() => {
 
-				process.argv.push("-d");
+				(0, process).argv.push("-d");
 
 				return Conf.load();
 
@@ -254,8 +276,8 @@ describe("load", () => {
 
 			}).then(() => {
 
-				process.argv.push("--usr.login", "login2");
-				process.argv.push("--lvl1.lvl2.lvl3", "test");
+				(0, process).argv.push("--usr.login", "login2");
+				(0, process).argv.push("--lvl1.lvl2.lvl3", "test");
 
 				return Conf.load();
 
