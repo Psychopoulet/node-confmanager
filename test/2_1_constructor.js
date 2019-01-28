@@ -2,9 +2,11 @@
 
 // deps
 
+	// natives
 	const { join } = require("path");
 	const assert = require("assert");
 
+	// locals
 	const NodeConfManager = require(join(__dirname, "..", "lib", "main.js"));
 
 // tests
