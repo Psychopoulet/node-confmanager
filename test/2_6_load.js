@@ -14,6 +14,25 @@
 
 	const CONF_FILE = join(__dirname, "conf.json");
 
+// private
+
+	// methods
+
+		/**
+		* Remove mocha's console arguments
+		* @param {NodeConfManager} Conf : Conf to clean
+		* @returns {Promise} Operation's result
+		*/
+		function _removeMochaConsoleArguments (Conf) {
+
+			[ "extension", "reporter", "slow", "timeout", "ui" ].forEach((key) => {
+				Conf.delete(key);
+			});
+
+			return Promise.resolve();
+
+		}
+
 // tests
 
 describe("load", () => {
@@ -54,7 +73,11 @@ describe("load", () => {
 					.save();
 
 			}).then(() => {
-				return Conf.load();
+
+				return Conf.load().then(() => {
+					return _removeMochaConsoleArguments(Conf);
+				});
+
 			}).then(() => {
 
 				assert.strictEqual(Conf.size, 3, "check 'size' loaded data failed");
@@ -153,7 +176,9 @@ describe("load", () => {
 				(0, process).argv.push("--debug", "true");
 				(0, process).argv.push("--test", "test2");
 
-				return Conf.load();
+				return Conf.load().then(() => {
+					return _removeMochaConsoleArguments(Conf);
+				});
 
 			}).then(() => {
 
@@ -200,7 +225,9 @@ describe("load", () => {
 				(0, process).argv.push("-d", "true");
 				(0, process).argv.push("-t", "test2");
 
-				return Conf.load();
+				return Conf.load().then(() => {
+					return _removeMochaConsoleArguments(Conf);
+				});
 
 			}).then(() => {
 
@@ -234,7 +261,9 @@ describe("load", () => {
 
 				(0, process).argv.push("-d");
 
-				return Conf.load();
+				return Conf.load().then(() => {
+					return _removeMochaConsoleArguments(Conf);
+				});
 
 			}).then(() => {
 
@@ -279,7 +308,9 @@ describe("load", () => {
 				(0, process).argv.push("--usr.login", "login2");
 				(0, process).argv.push("--lvl1.lvl2.lvl3", "test");
 
-				return Conf.load();
+				return Conf.load().then(() => {
+					return _removeMochaConsoleArguments(Conf);
+				});
 
 			}).then(() => {
 
