@@ -4,9 +4,9 @@ declare module "node-confmanager" {
 
 	class ConfManager {
 
-		protected _filePath: string;
-		protected _spaces: boolean;
-		protected _shortcuts: Array<string>;
+		public filePath: string;
+		public spaces: boolean;
+		public shortcuts: Array<string>;
 
 		constructor(filePath?: string, spaces?: boolean, recursionSeparator?: string);
 
