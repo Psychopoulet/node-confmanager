@@ -20,13 +20,13 @@
 
 		/**
 		* Remove mocha's console arguments
-		* @param {NodeConfManager} Conf : Conf to clean
+		* @param {NodeConfManager} conf : conf to clean
 		* @returns {Promise} Operation's result
 		*/
-		function _removeMochaConsoleArguments (Conf) {
+		function _removeMochaConsoleArguments (conf) {
 
 			[ "extension", "reporter", "slow", "timeout", "ui" ].forEach((key) => {
-				Conf.delete(key);
+				conf.delete(key);
 			});
 
 			return Promise.resolve();
@@ -43,27 +43,27 @@ describe("load", () => {
 
 	describe("from file", () => {
 
-		const Conf = new NodeConfManager(CONF_FILE, true);
+		const conf = new NodeConfManager(CONF_FILE, true);
 
 		before(() => {
-			return Conf.clear().skeleton("debug", "boolean").deleteFile();
+			return conf.clear().skeleton("debug", "boolean").deleteFile();
 		});
 
 		beforeEach(() => {
-			Conf.clearData().clearLimits();
+			conf.clearData().clearLimits();
 		});
 
 		after(() => {
-			return Conf.clear().deleteFile();
+			return conf.clear().deleteFile();
 		});
 
 		it("should load a configuration with successive promises", () => {
 
-			return Conf.fileExists().then((exists) => {
+			return conf.fileExists().then((exists) => {
 
 				assert.strictEqual(exists, false, "check file existance failed");
 
-				return Conf
+				return conf
 					.set("usr", {
 						"login": "login",
 						"pwd": "pwd"
@@ -74,22 +74,22 @@ describe("load", () => {
 
 			}).then(() => {
 
-				return Conf.load().then(() => {
-					return _removeMochaConsoleArguments(Conf);
+				return conf.load().then(() => {
+					return _removeMochaConsoleArguments(conf);
 				});
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 3, "check 'size' loaded data failed");
+				assert.strictEqual(conf.size, 3, "check 'size' loaded data failed");
 
-				assert.deepStrictEqual(Conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
-				assert.strictEqual(Conf.get("debug"), false, "check 'debug' loaded data failed");
-				assert.deepStrictEqual(Conf.get("usr"), {
+				assert.deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
+				assert.strictEqual(conf.get("debug"), false, "check 'debug' loaded data failed");
+				assert.deepStrictEqual(conf.get("usr"), {
 					"login": "login",
 					"pwd": "pwd"
 				}, "check 'usr' loaded data failed");
 
-				return Conf.fileExists();
+				return conf.fileExists();
 
 			}).then((exists) => {
 				assert.strictEqual(exists, true, "check file existance failed");
@@ -99,9 +99,9 @@ describe("load", () => {
 
 		it("should load a configuration with limit", () => {
 
-			Conf.limit("debug", [ true, false ]);
+			conf.limit("debug", [ true, false ]);
 
-			return Conf.load().catch(() => {
+			return conf.load().catch(() => {
 				return Promise.resolve();
 			});
 
@@ -111,12 +111,12 @@ describe("load", () => {
 
 	describe("from console first", () => {
 
-		const Conf = new NodeConfManager(CONF_FILE);
+		const conf = new NodeConfManager(CONF_FILE);
 		const argv = clone((0, process).argv);
 
 		before(() => {
 
-			return Conf.clear()
+			return conf.clear()
 				.skeleton("debug", "boolean").shortcut("debug", "d")
 				.skeleton("test", "string").shortcut("test", "t").limit("test", [ "test", "test2" ]);
 
@@ -124,7 +124,7 @@ describe("load", () => {
 
 		beforeEach(() => {
 			(0, process).argv = clone(argv);
-			Conf.clearData();
+			conf.clearData();
 		});
 
 		it("should not load", (done) => {
@@ -132,7 +132,7 @@ describe("load", () => {
 			(0, process).argv.push("--debug", "this is a test");
 			(0, process).argv.push("--test", "this is a test");
 
-			Conf.load().then(() => {
+			conf.load().then(() => {
 				done(new Error("Does not generate an error"));
 			}).catch((err) => {
 
@@ -149,7 +149,7 @@ describe("load", () => {
 
 			return Promise.resolve().then(() => {
 
-				Conf
+				conf
 					.set("usr", {
 						"login": "login",
 						"pwd": "pwd"
@@ -161,10 +161,10 @@ describe("load", () => {
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 3, "check loaded data failed (size)");
+				assert.strictEqual(conf.size, 3, "check loaded data failed (size)");
 
-				assert.strictEqual(Conf.get("debug"), false, "check loaded data failed (debug)");
-				assert.deepStrictEqual(Conf.get("usr"), {
+				assert.strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
+				assert.deepStrictEqual(conf.get("usr"), {
 					"login": "login",
 					"pwd": "pwd"
 				}, "check 'usr' loaded data failed");
@@ -176,16 +176,16 @@ describe("load", () => {
 				(0, process).argv.push("--debug", "true");
 				(0, process).argv.push("--test", "test2");
 
-				return Conf.load().then(() => {
-					return _removeMochaConsoleArguments(Conf);
+				return conf.load().then(() => {
+					return _removeMochaConsoleArguments(conf);
 				});
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 2, "check loaded data failed (size)");
+				assert.strictEqual(conf.size, 2, "check loaded data failed (size)");
 
-				assert.strictEqual(Conf.get("debug"), true, "check loaded data failed (debug)");
-				assert.strictEqual(Conf.get("test"), "test2", "check loaded data failed (test)");
+				assert.strictEqual(conf.get("debug"), true, "check loaded data failed (debug)");
+				assert.strictEqual(conf.get("test"), "test2", "check loaded data failed (test)");
 
 				return Promise.resolve();
 
@@ -197,7 +197,7 @@ describe("load", () => {
 
 			return Promise.resolve().then(() => {
 
-				Conf
+				conf
 					.set("usr", {
 						"login": "login",
 						"pwd": "pwd"
@@ -209,11 +209,11 @@ describe("load", () => {
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 3, "check loaded data failed (size)");
+				assert.strictEqual(conf.size, 3, "check loaded data failed (size)");
 
-				assert.deepStrictEqual(Conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
-				assert.strictEqual(Conf.get("debug"), false, "check loaded data failed (debug)");
-				assert.deepStrictEqual(Conf.get("usr"), {
+				assert.deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
+				assert.strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
+				assert.deepStrictEqual(conf.get("usr"), {
 					"login": "login",
 					"pwd": "pwd"
 				}, "check 'usr' loaded data failed");
@@ -225,16 +225,16 @@ describe("load", () => {
 				(0, process).argv.push("-d", "true");
 				(0, process).argv.push("-t", "test2");
 
-				return Conf.load().then(() => {
-					return _removeMochaConsoleArguments(Conf);
+				return conf.load().then(() => {
+					return _removeMochaConsoleArguments(conf);
 				});
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 2, "check loaded data failed (size)");
+				assert.strictEqual(conf.size, 2, "check loaded data failed (size)");
 
-				assert.strictEqual(Conf.get("debug"), true, "check loaded data failed (debug)");
-				assert.strictEqual(Conf.get("test"), "test2", "check loaded data failed (test)");
+				assert.strictEqual(conf.get("debug"), true, "check loaded data failed (debug)");
+				assert.strictEqual(conf.get("test"), "test2", "check loaded data failed (test)");
 
 				return Promise.resolve();
 
@@ -246,14 +246,14 @@ describe("load", () => {
 
 			return Promise.resolve().then(() => {
 
-				Conf.set("debug", "n");
+				conf.set("debug", "n");
 
 				return Promise.resolve();
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 1, "check loaded data failed (size)");
-				assert.strictEqual(Conf.get("debug"), false, "check loaded data failed (debug)");
+				assert.strictEqual(conf.size, 1, "check loaded data failed (size)");
+				assert.strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
 
 				return Promise.resolve();
 
@@ -261,14 +261,14 @@ describe("load", () => {
 
 				(0, process).argv.push("-d");
 
-				return Conf.load().then(() => {
-					return _removeMochaConsoleArguments(Conf);
+				return conf.load().then(() => {
+					return _removeMochaConsoleArguments(conf);
 				});
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 1, "check loaded data failed (size)");
-				assert.strictEqual(Conf.get("debug"), true, "check loaded data failed (debug)");
+				assert.strictEqual(conf.size, 1, "check loaded data failed (size)");
+				assert.strictEqual(conf.get("debug"), true, "check loaded data failed (debug)");
 
 				return Promise.resolve();
 
@@ -280,7 +280,7 @@ describe("load", () => {
 
 			return Promise.resolve().then(() => {
 
-				Conf
+				conf
 					.set("usr", {
 						"login": "login",
 						"pwd": "pwd"
@@ -292,11 +292,11 @@ describe("load", () => {
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 3, "check loaded data failed (size)");
+				assert.strictEqual(conf.size, 3, "check loaded data failed (size)");
 
-				assert.deepStrictEqual(Conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
-				assert.strictEqual(Conf.get("debug"), false, "check loaded data failed (debug)");
-				assert.deepStrictEqual(Conf.get("usr"), {
+				assert.deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
+				assert.strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
+				assert.deepStrictEqual(conf.get("usr"), {
 					"login": "login",
 					"pwd": "pwd"
 				}, "check 'usr' loaded data failed");
@@ -308,20 +308,20 @@ describe("load", () => {
 				(0, process).argv.push("--usr.login", "login2");
 				(0, process).argv.push("--lvl1.lvl2.lvl3", "test");
 
-				return Conf.load().then(() => {
-					return _removeMochaConsoleArguments(Conf);
+				return conf.load().then(() => {
+					return _removeMochaConsoleArguments(conf);
 				});
 
 			}).then(() => {
 
-				assert.strictEqual(Conf.size, 2, "check loaded data failed (size)");
+				assert.strictEqual(conf.size, 2, "check loaded data failed (size)");
 
-				assert.deepStrictEqual(Conf.get("lvl1"), {
+				assert.deepStrictEqual(conf.get("lvl1"), {
 					"lvl2": {
 						"lvl3": "test"
 					}
 				}, "check 'lvl1' loaded data failed");
-				assert.deepStrictEqual(Conf.get("usr"), {
+				assert.deepStrictEqual(conf.get("usr"), {
 					"login": "login2"
 				}, "check 'usr' loaded data failed");
 
