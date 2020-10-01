@@ -28,6 +28,12 @@ see the [node-containerpattern](https://www.npmjs.com/package/node-containerpatt
 
 ### node-confmanager
 
+  -- Attributes --
+
+  * ``` filePath: string ``` conf file
+  * ``` spaces: string ``` formate file
+  * ``` shortcuts: string ``` for container
+
   -- Constructor --
 
   * ``` constructor(confPath?: string, spaces?: boolean, recursionSeparator?: string) ```
