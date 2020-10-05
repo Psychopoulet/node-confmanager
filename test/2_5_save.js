@@ -17,58 +17,80 @@
 
 describe("save", () => {
 
-	const Conf = new NodeConfManager(CONF_FILE);
+	describe("without file", () => {
 
-	beforeEach(() => {
-		return Conf.clear().deleteFile();
-	});
+		const Conf = new NodeConfManager();
 
-	after(() => {
-		return Conf.clear().deleteFile();
-	});
+		it("should save a configuration", () => {
 
-	it("should save a configuration", () => {
+			return Conf.fileExists().then((exists) => {
 
-		return Conf.fileExists().then((exists) => {
+				assert.strictEqual(exists, false, "check file existance failed");
 
-			assert.strictEqual(exists, false, "check file existance failed");
+				return Conf.save();
 
-			return exists ? Promise.resolve() : Conf
-				.set("usr", {
-					"login": "login",
-					"pwd": "pwd"
-				})
-				.set("debug", "n")
-				.set("authors", [ "author1", "author2" ])
-				.save();
+			});
 
 		});
 
 	});
 
-	it("should save a configuration with spaces", () => {
+	describe("with file", () => {
 
-		Conf.spaces = true;
+		const Conf = new NodeConfManager(CONF_FILE);
 
-		return Conf.fileExists().then((exists) => {
+		beforeEach(() => {
+			return Conf.clear().deleteFile();
+		});
 
-			assert.strictEqual(exists, false, "check file existance failed");
+		after(() => {
+			return Conf.clear().deleteFile();
+		});
 
-			return exists ? Promise.resolve() : Conf
-				.set("usr", {
-					"login": "login",
-					"pwd": "pwd"
-				})
-				.set("debug", "n")
-				.set("authors", [ "author1", "author2" ])
-				.save();
+		it("should save a configuration", () => {
+
+			return Conf.fileExists().then((exists) => {
+
+				assert.strictEqual(exists, false, "check file existance failed");
+
+				return exists ? Promise.resolve() : Conf
+					.set("usr", {
+						"login": "login",
+						"pwd": "pwd"
+					})
+					.set("debug", "n")
+					.set("authors", [ "author1", "author2" ])
+					.save();
+
+			});
 
 		});
 
-	});
+		it("should save a configuration with spaces", () => {
 
-	it("should save a configuration without file", () => {
-		Conf._filePath = ""; return Conf.save();
+			Conf.spaces = true;
+
+			return Conf.fileExists().then((exists) => {
+
+				assert.strictEqual(exists, false, "check file existance failed");
+
+				return exists ? Promise.resolve() : Conf
+					.set("usr", {
+						"login": "login",
+						"pwd": "pwd"
+					})
+					.set("debug", "n")
+					.set("authors", [ "author1", "author2" ])
+					.save();
+
+			});
+
+		});
+
+		it("should save a configuration without file", () => {
+			Conf._filePath = ""; return Conf.save();
+		});
+
 	});
 
 });
