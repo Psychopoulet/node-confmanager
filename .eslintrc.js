@@ -84,7 +84,7 @@ module.exports = {
         "dot-location": [ "error", "property" ],
         "dot-notation": "error",
         "eqeqeq": "error",
-        "guard-for-in": "error",
+        "guard-for-in": 0,
         "no-alert": "error",
         "no-caller": "error",
         "no-case-declarations": "error",
