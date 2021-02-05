@@ -4,6 +4,5 @@ node_js:
   - "12"
   - "14"
 install:
-  - "npm install -g typescript"
   - "npm install"
 script: "npm run-script ci"

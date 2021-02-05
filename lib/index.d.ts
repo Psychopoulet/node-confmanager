@@ -2,7 +2,9 @@
 
 declare module "node-confmanager" {
 
-	class ConfManager {
+	import Container = require("node-containerpattern");
+
+	class ConfManager extends Container {
 
 		public filePath: string;
 		public spaces: boolean;
@@ -16,7 +18,7 @@ declare module "node-confmanager" {
 		public clearShortcuts(): ConfManager;
 		public clear(): ConfManager;
 		public deleteFile(): Promise<void>;
-		public get(): any;
+		public get(key: string): any;
 		public fileExists(): Promise<boolean>;
 		public load(): Promise<void>;
 		public save(): Promise<void>;
