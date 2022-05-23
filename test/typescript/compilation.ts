@@ -8,37 +8,44 @@
 	import { join } from "path";
 
 	// locals
-	import ConfManager = require("../../lib/main.js");
+	import ConfManager = require("node-confmanager");
 
 // consts
 
-	const Conf: ConfManager = new ConfManager(join(__dirname, "conf.json"));
+	const conf: ConfManager = new ConfManager(join(__dirname, "conf.json"));
 
 // module
 
-Conf
+conf
 	.skeleton("debug", "boolean").shortcut("debug", "d")
 	.shortcut("usr.login", "ul")
 	.shortcut("usr.password", "up");
 
-Conf.fileExists().then((exists: boolean): Promise<void> => {
+conf.fileExists().then((exists: boolean): Promise<void> => {
 
 	console.log(exists);
 
-	return Conf.set("usr", { login : "login", pwd : "pwd" })
+	return conf.set("usr", { login : "login", pwd : "pwd" })
 			.set("debug", false)
 			.set("prod", "n") // = false
 			.save();
 
 }).then((): Promise<void> => {
 
-	return Conf.load();
+	return conf.load();
 
-}).then((): void => {
+}).then((): Promise<void> => {
 
-	console.log(Conf.get("debug"));
-	console.log(Conf.get("usr.login"));
+	console.log(conf.get("debug"));
+	console.log(conf.get("usr.login"));
+
+	return conf.clear().deleteFile();
 
 }).catch((err: Error): void => {
-	console.log(err);
+
+	console.error(err);
+
+	process.exitCode = 1;
+	process.exit(1);
+
 });
