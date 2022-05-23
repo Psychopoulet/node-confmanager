@@ -14,9 +14,9 @@ declare module "node-confmanager" {
 
 		protected _loadFromConsole(): Promise<void>;
 
-		public shortcut(key: string, shortkey: string): ConfManager;
-		public clearShortcuts(): ConfManager;
-		public clear(): ConfManager;
+		public shortcut(key: string, shortkey: string): this;
+		public clearShortcuts(): this;
+		public clear(): this;
 		public deleteFile(): Promise<void>;
 		public get(key: string): any;
 		public fileExists(): Promise<boolean>;
