@@ -19,15 +19,15 @@ describe("save", () => {
 
 	describe("without file", () => {
 
-		const Conf = new NodeConfManager();
+		const conf = new NodeConfManager();
 
 		it("should save a configuration", () => {
 
-			return Conf.fileExists().then((exists) => {
+			return conf.fileExists().then((exists) => {
 
 				assert.strictEqual(exists, false, "check file existance failed");
 
-				return Conf.save();
+				return conf.save();
 
 			});
 
@@ -37,23 +37,31 @@ describe("save", () => {
 
 	describe("with file", () => {
 
-		const Conf = new NodeConfManager(CONF_FILE);
+		const conf = new NodeConfManager(CONF_FILE);
 
 		beforeEach(() => {
-			return Conf.clear().deleteFile();
+
+			conf.clear();
+
+			return conf.deleteFile();
+
 		});
 
 		after(() => {
-			return Conf.clear().deleteFile();
+
+			conf.clear();
+
+			return conf.deleteFile();
+
 		});
 
 		it("should save a configuration", () => {
 
-			return Conf.fileExists().then((exists) => {
+			return conf.fileExists().then((exists) => {
 
 				assert.strictEqual(exists, false, "check file existance failed");
 
-				return exists ? Promise.resolve() : Conf
+				return exists ? Promise.resolve() : conf
 					.set("usr", {
 						"login": "login",
 						"pwd": "pwd"
@@ -68,13 +76,13 @@ describe("save", () => {
 
 		it("should save a configuration with spaces", () => {
 
-			Conf.spaces = true;
+			conf.spaces = true;
 
-			return Conf.fileExists().then((exists) => {
+			return conf.fileExists().then((exists) => {
 
 				assert.strictEqual(exists, false, "check file existance failed");
 
-				return exists ? Promise.resolve() : Conf
+				return exists ? Promise.resolve() : conf
 					.set("usr", {
 						"login": "login",
 						"pwd": "pwd"
@@ -88,7 +96,11 @@ describe("save", () => {
 		});
 
 		it("should save a configuration without file", () => {
-			Conf._filePath = ""; return Conf.save();
+
+			conf._filePath = "";
+
+			return conf.save();
+
 		});
 
 	});

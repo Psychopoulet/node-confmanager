@@ -17,20 +17,28 @@
 
 describe("set", () => {
 
-	const Conf = new NodeConfManager(CONF_FILE, true);
+	const conf = new NodeConfManager(CONF_FILE, true);
 
 	before(() => {
-		return Conf.clear().deleteFile();
+
+		conf.clear();
+
+		return conf.deleteFile();
+
 	});
 
 	after(() => {
-		return Conf.clear().deleteFile();
+
+		conf.clear();
+
+		return conf.deleteFile();
+
 	});
 
 	it("should set a value", () => {
 
 		assert.throws(() => {
-			Conf.set(15);
+			conf.set(15);
 		}, Error, "check type value does not throw an error");
 
 	});

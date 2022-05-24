@@ -17,7 +17,13 @@
 describe("deleteFile", () => {
 
 	after(() => {
-		return new NodeConfManager().clear().deleteFile();
+
+		const conf = new NodeConfManager(CONF_FILE);
+
+		conf.clear();
+
+		return conf.deleteFile();
+
 	});
 
 	it("should delete file without file", () => {
