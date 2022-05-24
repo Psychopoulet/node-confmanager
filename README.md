@@ -24,100 +24,17 @@ $ npm install node-confmanager
 
 ## Doc
 
-see the [node-containerpattern](https://www.npmjs.com/package/node-containerpattern) documentation to see extended methods & attribues
+### Inheritance
 
-### node-confmanager
+[check the official 'node-containerpattern' object documentation](https://github.com/Psychopoulet/node-containerpattern)
 
-  -- Attributes --
+### Content
 
-  * ``` filePath: string ``` conf file
-  * ``` spaces: string ``` formate file
-  * ``` shortcuts: string ``` for container
-
-  -- Constructor --
-
-  * ``` constructor(confPath?: string, spaces?: boolean, recursionSeparator?: string) ```
-
-  -- Methods --
-
-  * ``` deleteFile() : return Promise instance ``` delete the conf file
-  * ``` fileExists() : return Promise instance => then((exists) => {}) ``` check if the conf file exists
-  * ``` clearShortcuts() : return this ``` forget all the shortcuts
-  * ``` clear() : return this ``` node-containerpattern.clear & clearShortcuts
-  * ``` load() : return Promise instance ``` load data from conf file then commandline (commandline takeover)
-  * ``` save() : return Promise instance ``` save data into conf file
-  * ``` shortcut(string key, string shortkey) : return this ``` bind a shortcut for commandline
+[check the TypeScript definition file](https://github.com/Psychopoulet/node-confmanager/blob/master/lib/index.d.ts)
 
 ## Examples
 
-### Native
-
-```javascript
-const ConfManager = require("node-confmanager");
-
-const conf = new ConfManager(require("path").join(__dirname, "conf.json"));
-
-conf
-  .skeleton("debug", "boolean") // add skeleton (based on [node-containerpattern](https://www.npmjs.com/package/node-containerpattern)) to check datatype
-  .shortcut("debug", "d") // add shortcut to simply use comandline params, can add "-d true" to commandline to activate debug
-  .shortcut("usr.login", "ul")
-  .shortcut("usr.password", "up");
-
-conf.fileExists().then((exists) => {
-  
-  return exists ? Promise.resolve() : Conf.set("usr", { login : "login", pwd : "pwd" })
-      .set("debug", false)
-      .set("prod", "n") // = false
-      .save();
-
-}).then(() => {
-
-  // can add "--usr.login login2" or "-ul login2" to commandline to force login change
-  return conf.load();
-
-}).then(() => {
-
-    console.log(conf.get("debug"));
-    console.log(conf.get("usr.login"));
-
-}).catch((err) => {
-  console.log(err);
-});
-```
-
-### Typescript
-
-```typescript
-import ConfManager = require("node-confmanager");
-import { join } from "path";
-
-const Conf = new ConfManager(join(__dirname, "conf.json"));
-
-Conf
-  .skeleton("debug", "boolean").shortcut("debug", "d")
-  .shortcut("usr.login", "ul")
-  .shortcut("usr.password", "up");
-
-Conf.fileExists().then((exists: boolean) => {
-
-  return exists ? Promise.resolve() : Conf.set("usr", { login : "login", pwd : "pwd" })
-      .set("debug", false)
-      .set("prod", "n") // = false
-      .save();
-
-}).then(() => {
-
-  return Conf.load();
-
-}).then(() => {
-
-    console.log(Conf.get("debug"));
-    console.log(Conf.get("usr.login"));
-
-}).catch((err: Error) => {
-  console.log(err);
-});
-```
+[check the TypeScript compilation tests](https://github.com/Psychopoulet/node-confmanager/blob/master/test/typescript/compilation.ts)
 
 ### Run
 
