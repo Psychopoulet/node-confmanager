@@ -46,7 +46,11 @@ describe("load", () => {
 		const conf = new NodeConfManager(CONF_FILE, true);
 
 		before(() => {
-			return conf.clear().skeleton("debug", "boolean").deleteFile();
+
+			conf.clear();
+
+			return conf.skeleton("debug", "boolean").deleteFile();
+
 		});
 
 		beforeEach(() => {
@@ -54,7 +58,11 @@ describe("load", () => {
 		});
 
 		after(() => {
-			return conf.clear().deleteFile();
+
+			conf.clear();
+
+			return conf.deleteFile();
+
 		});
 
 		it("should load a configuration with successive promises", () => {
@@ -116,7 +124,9 @@ describe("load", () => {
 
 		before(() => {
 
-			return conf.clear()
+			conf.clear();
+
+			return conf
 				.skeleton("debug", "boolean").shortcut("debug", "d")
 				.skeleton("test", "string").shortcut("test", "t").limit("test", [ "test", "test2" ]);
 

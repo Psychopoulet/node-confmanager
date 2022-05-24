@@ -17,31 +17,39 @@
 
 describe("get", () => {
 
-	const Conf = new NodeConfManager(CONF_FILE, true);
+	const conf = new NodeConfManager(CONF_FILE, true);
 
 	before(() => {
-		return Conf.clear().deleteFile();
+
+		conf.clear();
+
+		return conf.deleteFile();
+
 	});
 
 	after(() => {
-		return Conf.clear().deleteFile();
+
+		conf.clear();
+
+		return conf.deleteFile();
+
 	});
 
 	it("should get a value", () => {
 
-		Conf.set("usr", {
+		conf.set("usr", {
 			"login": "login",
 			"pwd": "pwd"
 		});
 
-		const usr = Conf.get("usr");
+		const usr = conf.get("usr");
 
 		assert.strictEqual(usr.login, "login", "check file existance failed");
 
 		usr.login = "login2";
 
 		assert.strictEqual(usr.login, "login2", "check file existance failed");
-		assert.strictEqual(Conf.get("usr").login, "login", "check file existance failed");
+		assert.strictEqual(conf.get("usr").login, "login", "check file existance failed");
 
 	});
 

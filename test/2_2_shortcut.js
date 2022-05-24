@@ -17,35 +17,36 @@
 
 describe("shortcut", () => {
 
-	const Conf = new NodeConfManager(CONF_FILE);
+	const conf = new NodeConfManager(CONF_FILE);
 
 	before(() => {
 
-		return Promise.resolve().then(() => {
-			return Conf.clear().deleteFile();
-		}).catch((err) => {
-			(0, console).log(err);
-			return Promise.reject(err);
-		});
+		conf.clear();
+
+		return conf.deleteFile();
+
 	});
 
 	beforeEach(() => {
-		return Conf.clear();
+		conf.clear();
 	});
 
 	after(() => {
-		return Conf.clear().deleteFile();
-	});
 
+		conf.clear();
+
+		return conf.deleteFile();
+
+	});
 
 	it("should test wrong binds", () => {
 
 		assert.throws(() => {
-			Conf.shortcut(false, "t");
+			conf.shortcut(false, "t");
 		}, Error, "check type value does not throw an error");
 
 		assert.throws(() => {
-			Conf.shortcut("", "t");
+			conf.shortcut("", "t");
 		}, Error, "check type value does not throw an error");
 
 	});
@@ -53,12 +54,12 @@ describe("shortcut", () => {
 	it("should bind shortcut", () => {
 
 		assert.strictEqual(
-			Conf.set("test", "test").shortcut("test", "t") instanceof NodeConfManager, true,
+			conf.set("test", "test").shortcut("test", "t") instanceof NodeConfManager, true,
 			"return data is not an instanceof NodeConfManager"
 		);
 
 		assert.strictEqual(
-			Conf.set("test", "test").shortcut("TEST", "T") instanceof NodeConfManager, true,
+			conf.set("test", "test").shortcut("TEST", "T") instanceof NodeConfManager, true,
 			"return data is not an instanceof NodeConfManager"
 		);
 
