@@ -1,6 +1,6 @@
 {
   "name": "node-confmanager",
-  "version": "1.4.7",
+  "version": "1.5.0",
   "description": "A configuration manager",
   "main": "lib/main.js",
   "typings": "lib/index.d.ts",
@@ -45,7 +45,7 @@
     "url": "https://github.com/Psychopoulet/node-confmanager/issues"
   },
   "dependencies": {
-    "node-containerpattern": "1.4.5",
+    "node-containerpattern": "1.5.1",
     "fs-extra": "10.1.0"
   },
   "devDependencies": {
