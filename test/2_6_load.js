@@ -137,7 +137,7 @@ describe("load", () => {
 			conf.clearData();
 		});
 
-		it("should not load", (done) => {
+		it("should not load (wrong limits)", (done) => {
 
 			(0, process).argv.push("--debug", "this is a test");
 			(0, process).argv.push("--test", "this is a test");
@@ -152,6 +152,67 @@ describe("load", () => {
 				done();
 
 			});
+
+		});
+
+		it("should not load (no more arguments)", (done) => {
+
+			(0, process).argv.push("--test");
+
+			conf.load().then(() => {
+				done(new Error("Does not generate an error"));
+			}).catch((err) => {
+
+				assert.strictEqual(typeof err, "object", "Generated error is not an object");
+				assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+
+				done();
+
+			});
+
+		});
+
+		it("should not load (next argument is a valid key)", (done) => {
+
+			(0, process).argv.push("--test");
+			(0, process).argv.push("--test2");
+
+			conf.load().then(() => {
+				done(new Error("Does not generate an error"));
+			}).catch((err) => {
+
+				assert.strictEqual(typeof err, "object", "Generated error is not an object");
+				assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+
+				done();
+
+			});
+
+		});
+
+		it("should not load (next argument is a valid shortcut)", (done) => {
+
+			(0, process).argv.push("--test");
+			(0, process).argv.push("-d");
+
+			conf.load().then(() => {
+				done(new Error("Does not generate an error"));
+			}).catch((err) => {
+
+				assert.strictEqual(typeof err, "object", "Generated error is not an object");
+				assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+
+				done();
+
+			});
+
+		});
+
+		it("should load (with empty key)", () => {
+
+			(0, process).argv.push("--");
+
+			return conf.load();
 
 		});
 
