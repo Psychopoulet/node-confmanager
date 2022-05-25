@@ -40,7 +40,7 @@ $ npm install node-confmanager
 
 ```bash
 node mysoft.js -d
-node mysoft.js --debug
+node mysoft.js --debug # if "skeleton" is defined as a boolean
 node mysoft.js --debug "true"
 node mysoft.js --debug "yes"
 node mysoft.js --debug "y"
