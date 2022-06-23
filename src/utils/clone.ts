@@ -2,7 +2,7 @@
 
 // module
 
-module.exports = function clone (from) {
+export default function clone (from: any): any {
 
 	if (from && "object" === typeof from) {
 
