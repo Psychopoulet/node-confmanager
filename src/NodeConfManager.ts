@@ -63,18 +63,18 @@ export default class ConfManager extends NodeContainerPattern {
 
 	private _loadFromConsole (): Promise<void> {
 
-		return Promise.resolve().then(() => {
+		return Promise.resolve().then((): Promise<void> => {
 
-			(0, process).argv.slice(2, (0, process).argv.length).forEach((arg, i, args) => {
+			process.argv.slice(2, process.argv.length).forEach((arg, i, args): void => {
 
 				if (arg.startsWith("-")) {
 
-					const isShortcut = !arg.startsWith("--");
-					const argument = arg.slice(isShortcut ? 1 : 2, arg.length);
+					const isShortcut: boolean = !arg.startsWith("--");
+					const argument: string = arg.slice(isShortcut ? 1 : 2, arg.length);
 
 					if (argument && (!isShortcut || this.shortcuts[argument])) {
 
-						const key = isShortcut ? this.shortcuts[argument] : argument;
+						const key: string = isShortcut ? this.shortcuts[argument] : argument;
 
 						if (this.skeletons[key] && "boolean" === this.skeletons[key]) {
 							this.set(key, true);
@@ -107,44 +107,44 @@ export default class ConfManager extends NodeContainerPattern {
 	// public
 
 	// Container.clear & clearShortcuts
-	public clear () {
+	public clear (): void {
 		super.clear();
 		this.clearShortcuts();
 	}
 
 	// forget all the shortcuts
-	public clearShortcuts () {
+	public clearShortcuts (): this {
 		this.shortcuts = {};
 		return this;
 	}
 
 	// delete the conf file
-	public deleteFile () {
+	public deleteFile (): Promise<void> {
 
-		return !this.filePath ? Promise.resolve() : pathExists(this.filePath).then((exists) => {
+		return !this.filePath ? Promise.resolve() : pathExists(this.filePath).then((exists: boolean): Promise<void> => {
 			return exists ? unlink(this.filePath) : Promise.resolve();
 		});
 
 	}
 
 	// check if the conf file exists
-	public fileExists () {
+	public fileExists (): Promise<boolean> {
 		return !this.filePath ? Promise.resolve(false) : pathExists(this.filePath);
 	}
 
 	// Container.get with cloned data
-	public get (key: string) {
+	public get (key: string): any {
 		return clone(super.get(key));
 	}
 
 	// load data from conf file then commandline (commandline takeover)
-	public load () {
+	public load (): Promise<void> {
 
 		this.clearData();
 
-		return this.fileExists().then((exists) => {
+		return this.fileExists().then((exists: boolean): Promise<void> => {
 
-			return !exists ? this._loadFromConsole() : readJson(this.filePath, "utf8").then((data) => {
+			return !exists ? this._loadFromConsole() : readJson(this.filePath, "utf8").then((data: { [key: string]: any }): Promise<void> => {
 
 				for (const key in data) {
 					this.set(key, data[key]);
@@ -159,18 +159,18 @@ export default class ConfManager extends NodeContainerPattern {
 	}
 
 	// save data into conf file
-	public save () {
+	public save (): Promise<void> {
 
-		return !this.filePath ? Promise.resolve() : mkdirp(dirname(this.filePath)).then(() => {
+		return !this.filePath ? Promise.resolve() : mkdirp(dirname(this.filePath)).then((): Promise<void> => {
 
 			const objects = {};
-			this.forEach((value, key) => {
+			this.forEach((value: any, key: string): void => {
 				objects[key] = value;
 			});
 
 			return this.spaces ? writeJson(this.filePath, objects, {
 				"encoding": "utf8",
-				"space": 2
+				"spaces": 2
 			}) : writeJson(this.filePath, objects, {
 				"encoding": "utf8"
 			});
@@ -180,9 +180,9 @@ export default class ConfManager extends NodeContainerPattern {
 	}
 
 	// bind a shortcut for commandline
-	public shortcut (_key: string, _shortkey: string) {
+	public shortcut (_key: string, _shortkey: string): this {
 
-		const { key, shortkey } = checkShortcut(_key, _shortkey);
+		const { key, shortkey }: { "key": string; "shortkey": string; } = checkShortcut(_key, _shortkey);
 
 		this.shortcuts[shortkey] = key;
 
