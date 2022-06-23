@@ -3,7 +3,7 @@
 // deps
 
 	// natives
-	import { dirname, join } from "path";
+	import { dirname } from "path";
 
 	// externals
 	import { pathExists, mkdirp, readJson, unlink, writeJson } from "fs-extra";
@@ -17,9 +17,9 @@
 
 export default class ConfManager extends NodeContainerPattern {
 
-	// private
+	// attributes
 
-		// attributes
+		// public
 
 		public filePath: string;
 		public spaces: boolean;
@@ -65,7 +65,7 @@ export default class ConfManager extends NodeContainerPattern {
 
 		return Promise.resolve().then((): Promise<void> => {
 
-			process.argv.slice(2, process.argv.length).forEach((arg, i, args): void => {
+			process.argv.slice(2, process.argv.length).forEach((arg: string, i: number, args: Array<string>): void => {
 
 				if (arg.startsWith("-")) {
 
@@ -163,7 +163,7 @@ export default class ConfManager extends NodeContainerPattern {
 
 		return !this.filePath ? Promise.resolve() : mkdirp(dirname(this.filePath)).then((): Promise<void> => {
 
-			const objects = {};
+			const objects: { [key:string]: any } = {};
 			this.forEach((value: any, key: string): void => {
 				objects[key] = value;
 			});
