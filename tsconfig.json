@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+
+		"target": "es6",
+
+		"declaration": true,
+
+		"alwaysStrict": true,
+		"strict": true,
+		"strictFunctionTypes": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true
+
+	},
+	"exclude": [
+		"node_modules"
+	]
+}
