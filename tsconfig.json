@@ -2,8 +2,12 @@
 	"compilerOptions": {
 
 		"target": "es6",
+		"module": "commonjs",
+		
+		"outDir": "./lib/cjs",
 
 		"declaration": true,
+		"declarationDir": "./lib/cjs",
 
 		"alwaysStrict": true,
 		"strict": true,
@@ -16,6 +20,9 @@
 		"forceConsistentCasingInFileNames": true
 
 	},
+	"include": [
+		"./src/main.cts"
+	],
 	"exclude": [
 		"node_modules"
 	]

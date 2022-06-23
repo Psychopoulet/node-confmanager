@@ -20,7 +20,7 @@
 
     "check-updates": "npx check-version-modules",
 
-    "compile": "npx tsc --project \"./tsconfig-cjs.json\"",
+    "compile": "npx tsc --project \"./tsconfig.json\"",
 
     "unit-tests": "npm run compile && npx nyc --reporter=html --reporter=text mocha",
     "tests": "npm run-script check-updates && npm run-script unit-tests",
