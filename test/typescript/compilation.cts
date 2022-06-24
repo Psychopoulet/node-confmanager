@@ -1,4 +1,4 @@
-/// <reference path="../../lib/index.d.ts" />
+/// <reference path="../../lib/cjs/main.d.cts" />
 
 "use strict";
 
@@ -8,7 +8,7 @@
 	import { join } from "path";
 
 	// locals
-	import ConfManager = require("node-confmanager");
+	import ConfManager = require("../../lib/cjs/main.cjs");
 
 // consts
 

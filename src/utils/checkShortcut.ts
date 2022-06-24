@@ -2,7 +2,7 @@
 
 // module
 
-module.exports = function checkShortcut (key, shortkey) {
+export default function checkShortcut (key: string, shortkey: string): { "key": string; "shortkey": string; } {
 
 	if ("undefined" === typeof key) {
 		throw new ReferenceError("Missing \"key\" parameter");

@@ -7,7 +7,7 @@
 	const { strictEqual } = require("assert");
 
 	// locals
-	const clone = require(join(__dirname, "..", "lib", "clone.js"));
+	const clone = require(join(__dirname, "..", "lib", "cjs", "utils", "clone.js")).default;
 
 // tests
 
