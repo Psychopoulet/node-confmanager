@@ -7,7 +7,7 @@
 	const assert = require("assert");
 
 	// locals
-	const checkShortcut = require(join(__dirname, "..", "lib", "checkShortcut.js"));
+	const checkShortcut = require(join(__dirname, "..", "lib", "cjs", "utils", "checkShortcut.js")).default;
 
 // tests
 

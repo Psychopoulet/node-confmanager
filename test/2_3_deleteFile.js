@@ -6,7 +6,7 @@
 	const { join } = require("path");
 
 	// locals
-	const NodeConfManager = require(join(__dirname, "..", "lib", "main.js"));
+	const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // consts
 

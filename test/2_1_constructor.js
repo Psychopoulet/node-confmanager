@@ -7,7 +7,7 @@
 	const assert = require("assert");
 
 	// locals
-	const NodeConfManager = require(join(__dirname, "..", "lib", "main.js"));
+	const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // tests
 
