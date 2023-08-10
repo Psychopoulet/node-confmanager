@@ -79,9 +79,12 @@ export default class ConfManager extends NodeContainerPattern {
 
 					const key: string = isShortcut ? this.shortcuts[argument] : argument;
 
+					// boolean
 					if (this.skeletons[key] && "boolean" === this.skeletons[key]) {
 						this.set(key, true);
 					}
+
+					// check args
 					else if (i + 1 >= args.length) {
 						throw new ReferenceError("Missing value for \"" + argument + "\" key (no more arguments)");
 					}
@@ -91,34 +94,36 @@ export default class ConfManager extends NodeContainerPattern {
 					else if (args[i + 1].startsWith("-") && this.shortcuts[args[i + 1].slice(1)]) {
 						throw new ReferenceError("Missing value for \"" + argument + "\" key (next argument is a valid shortcut)");
 					}
-                    else if (this.skeletons[key] && "array" === this.skeletons[key]) {
 
-                        const nextArgs: Array<string> = args.slice(i + 1, args.length);
+					// array
+					else if (this.skeletons[key] && "array" === this.skeletons[key]) {
 
-                        if (!nextArgs.length) {
-                            this.set(key, []);
-                        }
-                        else {
+						const nextArgs: Array<string> = args.slice(i + 1, args.length);
 
-                            const endArrayArgs: number = nextArgs.findIndex((a: string): boolean => {
+						if (!nextArgs.length) {
+							this.set(key, []);
+						}
+						else {
 
-                                return  a.startsWith("--") ||
-                                    (a.startsWith("-") && !!this.shortcuts[a.slice(1)]);
+							const endArrayArgs: number = nextArgs.findIndex((a: string): boolean => {
 
-                            });
+								return  a.startsWith("--") ||
+									(a.startsWith("-") && !!this.shortcuts[a.slice(1)]);
+
+							});
 
 							const values: Array<string> = 0 < endArrayArgs ? nextArgs.slice(0, endArrayArgs) : nextArgs;
 
 							if (1 === values.length && values[0].startsWith("[") && values[0].endsWith("]")) {
-                                this.set(key, values[0]);
+								this.set(key, JSON.parse(values[0]));
 							}
 							else {
-                                this.set(key, values);
+								this.set(key, values);
 							}
 
-                        }
+						}
 
-                    }
+					}
 					else {
 						this.set(key, args[i + 1]);
 					}
