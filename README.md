@@ -39,11 +39,18 @@ $ npm install node-confmanager
 ### Run
 
 ```bash
-node mysoft.js -d
-node mysoft.js --debug # if "skeleton" is defined as a boolean
+# if "debug" skeleton is setted & defined as a boolean
+node mysoft.js -d      # if "debug" shortcut is setted
+node mysoft.js --debug
 node mysoft.js --debug "true"
 node mysoft.js --debug "yes"
 node mysoft.js --debug "y"
+```
+
+```bash
+# if "arr" skeleton is defined as a array
+node mysoft.js --arr test1 test2
+node mysoft.js --arr "[ \"test1\", \"test2\" ]"
 ```
 
 ## Tests

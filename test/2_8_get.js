@@ -3,8 +3,8 @@
 // deps
 
 	// natives
-	const { join } = require("path");
-	const assert = require("assert");
+	const { join } = require("node:path");
+	const assert = require("node:assert");
 
 	// locals
 	const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));

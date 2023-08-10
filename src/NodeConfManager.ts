@@ -3,15 +3,16 @@
 // deps
 
 	// natives
-	import { dirname } from "path";
+	import { dirname } from "node:path";
+	import { unlink, readFile, writeFile, mkdir } from "node:fs/promises";
 
 	// externals
-	import { pathExists, mkdirp, readJson, unlink, writeJson } from "fs-extra";
 	import NodeContainerPattern = require("node-containerpattern");
 
 	// locals
 	import checkShortcut from "./utils/checkShortcut";
 	import clone from "./utils/clone";
+	import isFile from "./utils/isFile";
 
 // module
 
@@ -61,44 +62,75 @@ export default class ConfManager extends NodeContainerPattern {
 
 	// private
 
-	private _loadFromConsole (): Promise<void> {
+	private _loadFromConsole (): void {
 
-		return Promise.resolve().then((): Promise<void> => {
+		process.argv.slice(2, process.argv.length).forEach((arg: string, i: number, args: Array<string>): void => {
 
-			process.argv.slice(2, process.argv.length).forEach((arg: string, i: number, args: Array<string>): void => {
+			if ("--" === arg) {
+				return;
+			}
 
-				if (arg.startsWith("-")) {
+			if (arg.startsWith("-")) {
 
-					const isShortcut: boolean = !arg.startsWith("--");
-					const argument: string = arg.slice(isShortcut ? 1 : 2, arg.length);
+				const isShortcut: boolean = !arg.startsWith("--");
+				const argument: string = arg.slice(isShortcut ? 1 : 2, arg.length);
 
-					if (argument && (!isShortcut || this.shortcuts[argument])) {
+				if (argument && (!isShortcut || this.shortcuts[argument])) {
 
-						const key: string = isShortcut ? this.shortcuts[argument] : argument;
+					const key: string = isShortcut ? this.shortcuts[argument] : argument;
 
-						if (this.skeletons[key] && "boolean" === this.skeletons[key]) {
-							this.set(key, true);
-						}
-						else if (i + 1 >= args.length) {
-							throw new ReferenceError("Missing value for \"" + argument + "\" key (no more arguments)");
-						}
-						else if (args[i + 1].startsWith("--")) {
-							throw new ReferenceError("Missing value for \"" + argument + "\" key (next argument is a valid key)");
-						}
-						else if (args[i + 1].startsWith("-") && this.shortcuts[args[i + 1].slice(1)]) {
-							throw new ReferenceError("Missing value for \"" + argument + "\" key (next argument is a valid shortcut)");
+					// boolean
+					if (this.skeletons[key] && "boolean" === this.skeletons[key]) {
+						this.set(key, true);
+					}
+
+					// check args
+					else if (i + 1 >= args.length) {
+						throw new ReferenceError("Missing value for \"" + argument + "\" key (no more arguments)");
+					}
+					else if (args[i + 1].startsWith("--")) {
+						throw new ReferenceError("Missing value for \"" + argument + "\" key (next argument is a valid key)");
+					}
+					else if (args[i + 1].startsWith("-") && this.shortcuts[args[i + 1].slice(1)]) {
+						throw new ReferenceError("Missing value for \"" + argument + "\" key (next argument is a valid shortcut)");
+					}
+
+					// array
+					else if (this.skeletons[key] && "array" === this.skeletons[key]) {
+
+						const nextArgs: Array<string> = args.slice(i + 1, args.length);
+
+						if (!nextArgs.length) {
+							this.set(key, []);
 						}
 						else {
-							this.set(key, args[i + 1]);
+
+							const endArrayArgs: number = nextArgs.findIndex((a: string): boolean => {
+
+								return  a.startsWith("--") ||
+									(a.startsWith("-") && !!this.shortcuts[a.slice(1)]);
+
+							});
+
+							const values: Array<string> = 0 < endArrayArgs ? nextArgs.slice(0, endArrayArgs) : nextArgs;
+
+							if (1 === values.length && values[0].startsWith("[") && values[0].endsWith("]")) {
+								this.set(key, JSON.parse(values[0]));
+							}
+							else {
+								this.set(key, values);
+							}
+
 						}
 
+					}
+					else {
+						this.set(key, args[i + 1]);
 					}
 
 				}
 
-			});
-
-			return Promise.resolve();
+			}
 
 		});
 
@@ -121,7 +153,7 @@ export default class ConfManager extends NodeContainerPattern {
 	// delete the conf file
 	public deleteFile (): Promise<void> {
 
-		return !this.filePath ? Promise.resolve() : pathExists(this.filePath).then((exists: boolean): Promise<void> => {
+		return !this.filePath ? Promise.resolve() : isFile(this.filePath).then((exists: boolean): Promise<void> => {
 			return exists ? unlink(this.filePath) : Promise.resolve();
 		});
 
@@ -129,7 +161,7 @@ export default class ConfManager extends NodeContainerPattern {
 
 	// check if the conf file exists
 	public fileExists (): Promise<boolean> {
-		return !this.filePath ? Promise.resolve(false) : pathExists(this.filePath);
+		return !this.filePath ? Promise.resolve(false) : isFile(this.filePath);
 	}
 
 	// Container.get with cloned data
@@ -138,21 +170,36 @@ export default class ConfManager extends NodeContainerPattern {
 	}
 
 	// load data from conf file then commandline (commandline takeover)
-	public load (): Promise<void> {
+	public load (loadConsole: boolean = true): Promise<void> {
 
 		this.clearData();
 
-		return this.fileExists().then((exists: boolean): Promise<void> => {
+		return this.fileExists().then((exists: boolean): Promise<void> | void => {
 
-			return !exists ? this._loadFromConsole() : readJson(this.filePath, "utf8").then((data: { [key: string]: any }): Promise<void> => {
+			if (!exists) {
 
-				for (const key in data) {
-					this.set(key, data[key]);
+				if (loadConsole) {
+					this._loadFromConsole();
 				}
 
-				return this._loadFromConsole();
+			}
+			else {
 
-			});
+				return readFile(this.filePath, "utf8").then((content: string): { [key: string]: any } => {
+					return JSON.parse(content);
+				}).then((data: { [key: string]: any }): void => {
+
+					for (const key in data) {
+						this.set(key, data[key]);
+					}
+
+					if (loadConsole) {
+						this._loadFromConsole();
+					}
+
+				});
+
+			}
 
 		});
 
@@ -161,19 +208,18 @@ export default class ConfManager extends NodeContainerPattern {
 	// save data into conf file
 	public save (): Promise<void> {
 
-		return !this.filePath ? Promise.resolve() : mkdirp(dirname(this.filePath)).then((): Promise<void> => {
+		return !this.filePath ? Promise.resolve() : mkdir(dirname(this.filePath), {
+			"recursive": true
+		}).then((): Promise<void> => {
 
 			const objects: { [key:string]: any } = {};
 			this.forEach((value: any, key: string): void => {
 				objects[key] = value;
 			});
 
-			return this.spaces ? writeJson(this.filePath, objects, {
-				"encoding": "utf8",
-				"spaces": 2
-			}) : writeJson(this.filePath, objects, {
-				"encoding": "utf8"
-			});
+			return this.spaces ?
+				writeFile(this.filePath, JSON.stringify(objects, undefined, 2), "utf8") :
+				writeFile(this.filePath, JSON.stringify(objects), "utf8");
 
 		});
 

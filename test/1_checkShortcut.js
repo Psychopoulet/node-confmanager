@@ -3,8 +3,8 @@
 // deps
 
 	// natives
-	const { join } = require("path");
-	const assert = require("assert");
+	const { join } = require("node:path");
+	const assert = require("node:assert");
 
 	// locals
 	const checkShortcut = require(join(__dirname, "..", "lib", "cjs", "utils", "checkShortcut.js")).default;

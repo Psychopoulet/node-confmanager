@@ -3,8 +3,8 @@
 // deps
 
 	// natives
-	const { join } = require("path");
-	const assert = require("assert");
+	const { join } = require("node:path");
+	const assert = require("node:assert");
 
 	// locals
 	const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
@@ -128,7 +128,8 @@ describe("load", () => {
 
 			return conf
 				.skeleton("debug", "boolean").shortcut("debug", "d")
-				.skeleton("test", "string").shortcut("test", "t").limit("test", [ "test", "test2" ]);
+				.skeleton("test", "string").shortcut("test", "t").limit("test", [ "test", "test2" ])
+				.skeleton("plugins", "array");
 
 		});
 
@@ -213,6 +214,80 @@ describe("load", () => {
 			(0, process).argv.push("--");
 
 			return conf.load();
+
+		});
+
+		it("should load boolean", () => {
+
+			(0, process).argv.push("--debug");
+
+			return conf.load().then(() => {
+
+				assert.strictEqual(conf.get("debug"), true);
+
+			});
+
+		});
+
+		it("should load array (with no value)", (done) => {
+
+			(0, process).argv.push("--plugins");
+
+			conf.load().then(() => {
+				done(new Error("Does not generate an error"));
+			}).catch((err) => {
+
+				assert.strictEqual(typeof err, "object", "Generated error is not an object");
+				assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+
+				done();
+
+			});
+
+		});
+
+		it("should load array (with no value and a new key)", (done) => {
+
+			(0, process).argv.push("--plugins");
+			(0, process).argv.push("--debug");
+
+			conf.load().then(() => {
+				done(new Error("Does not generate an error"));
+			}).catch((err) => {
+
+				assert.strictEqual(typeof err, "object", "Generated error is not an object");
+				assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+
+				done();
+
+			});
+
+		});
+
+		it("should load array (from parsed string)", () => {
+
+			(0, process).argv.push("--plugins");
+			(0, process).argv.push("[ \"test1\", \"test2\" ]");
+
+			return conf.load().then(() => {
+
+				assert.deepStrictEqual(conf.get("plugins"), [ "test1", "test2" ]);
+
+			});
+
+		});
+
+		it("should load array (from multiple strings)", () => {
+
+			(0, process).argv.push("--plugins");
+			(0, process).argv.push("test1");
+			(0, process).argv.push("test2");
+
+			return conf.load().then(() => {
+
+				assert.deepStrictEqual(conf.get("plugins"), [ "test1", "test2" ]);
+
+			});
 
 		});
 
