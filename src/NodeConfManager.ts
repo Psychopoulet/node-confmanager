@@ -66,6 +66,10 @@ export default class ConfManager extends NodeContainerPattern {
 
 		process.argv.slice(2, process.argv.length).forEach((arg: string, i: number, args: Array<string>): void => {
 
+			if ("--" === arg) {
+				return;
+			}
+
 			if (arg.startsWith("-")) {
 
 				const isShortcut: boolean = !arg.startsWith("--");
@@ -87,6 +91,34 @@ export default class ConfManager extends NodeContainerPattern {
 					else if (args[i + 1].startsWith("-") && this.shortcuts[args[i + 1].slice(1)]) {
 						throw new ReferenceError("Missing value for \"" + argument + "\" key (next argument is a valid shortcut)");
 					}
+                    else if (this.skeletons[key] && "array" === this.skeletons[key]) {
+
+                        const nextArgs: Array<string> = args.slice(i + 1, args.length);
+
+                        if (!nextArgs.length) {
+                            this.set(key, []);
+                        }
+                        else {
+
+                            const endArrayArgs: number = nextArgs.findIndex((a: string): boolean => {
+
+                                return  a.startsWith("--") ||
+                                    (a.startsWith("-") && !!this.shortcuts[a.slice(1)]);
+
+                            });
+
+							const values: Array<string> = 0 < endArrayArgs ? nextArgs.slice(0, endArrayArgs) : nextArgs;
+
+							if (1 === values.length && values[0].startsWith("[") && values[0].endsWith("]")) {
+                                this.set(key, values[0]);
+							}
+							else {
+                                this.set(key, values);
+							}
+
+                        }
+
+                    }
 					else {
 						this.set(key, args[i + 1]);
 					}
@@ -133,14 +165,18 @@ export default class ConfManager extends NodeContainerPattern {
 	}
 
 	// load data from conf file then commandline (commandline takeover)
-	public load (): Promise<void> {
+	public load (loadConsole: boolean = true): Promise<void> {
 
 		this.clearData();
 
 		return this.fileExists().then((exists: boolean): Promise<void> | void => {
 
 			if (!exists) {
-				this._loadFromConsole();
+
+				if (loadConsole) {
+					this._loadFromConsole();
+				}
+
 			}
 			else {
 
@@ -152,7 +188,9 @@ export default class ConfManager extends NodeContainerPattern {
 						this.set(key, data[key]);
 					}
 
-					this._loadFromConsole();
+					if (loadConsole) {
+						this._loadFromConsole();
+					}
 
 				});
 

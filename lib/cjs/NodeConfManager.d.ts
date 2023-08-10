@@ -12,7 +12,7 @@ export default class ConfManager extends NodeContainerPattern {
     deleteFile(): Promise<void>;
     fileExists(): Promise<boolean>;
     get(key: string): any;
-    load(): Promise<void>;
+    load(loadConsole?: boolean): Promise<void>;
     save(): Promise<void>;
     shortcut(_key: string, _shortkey: string): this;
 }
