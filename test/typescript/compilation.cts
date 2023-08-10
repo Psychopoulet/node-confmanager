@@ -5,7 +5,7 @@
 // deps
 
 	// natives
-	import { join } from "path";
+	import { join } from "node:path";
 
 	// locals
 	import ConfManager = require("../../lib/cjs/main.cjs");
