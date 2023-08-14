@@ -1,3 +1,7 @@
+/*
+	eslint-disable no-path-concat
+*/
+
 "use strict";
 
 // deps
