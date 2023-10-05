@@ -14,7 +14,7 @@
 
 	const conf: ConfManager = new ConfManager(join(__dirname, "conf.json"));
 
-// module
+// test
 
 conf
 	.skeleton("debug", "boolean").shortcut("debug", "d")
