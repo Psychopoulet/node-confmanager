@@ -100,10 +100,7 @@ export default class ConfManager extends NodeContainerPattern {
 
 						const nextArgs: Array<string> = args.slice(i + 1, args.length);
 
-						if (!nextArgs.length) {
-							this.set(key, []);
-						}
-						else {
+						if (nextArgs.length) {
 
 							const endArrayArgs: number = nextArgs.findIndex((a: string): boolean => {
 
