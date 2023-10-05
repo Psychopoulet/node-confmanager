@@ -182,7 +182,7 @@ export default class ConfManager extends NodeContainerPattern {
 			}
 			else {
 
-				return readFile(this.filePath, "utf8").then((content: string): { [key: string]: any } => {
+				return readFile(this.filePath, "utf-8").then((content: string): { [key: string]: any } => {
 					return JSON.parse(content);
 				}).then((data: { [key: string]: any }): void => {
 
@@ -215,8 +215,8 @@ export default class ConfManager extends NodeContainerPattern {
 			});
 
 			return this.spaces ?
-				writeFile(this.filePath, JSON.stringify(objects, undefined, 2), "utf8") :
-				writeFile(this.filePath, JSON.stringify(objects), "utf8");
+				writeFile(this.filePath, JSON.stringify(objects, undefined, 2), "utf-8") :
+				writeFile(this.filePath, JSON.stringify(objects), "utf-8");
 
 		});
 
