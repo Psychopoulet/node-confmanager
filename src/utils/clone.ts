@@ -7,7 +7,7 @@ export default function clone (from: any): any {
         if (Object === from.constructor) {
             return { ...from };
         }
-        else if (Array === from.constructor) {
+        else if (Array.isArray(from)) {
             return [ ...from ];
         }
         else {

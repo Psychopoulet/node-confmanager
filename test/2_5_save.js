@@ -1,108 +1,106 @@
-"use strict";
-
 // deps
 
-	// natives
-	const { join } = require("node:path");
-	const assert = require("node:assert");
+    // natives
+    const { join } = require("node:path");
+    const assert = require("node:assert");
 
-	// locals
-	const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
+    // locals
+    const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // consts
 
-	const CONF_FILE = join(__dirname, "conf.json");
+    const CONF_FILE = join(__dirname, "conf.json");
 
 // tests
 
 describe("save", () => {
 
-	describe("without file", () => {
+    describe("without file", () => {
 
-		const conf = new NodeConfManager();
+        const conf = new NodeConfManager();
 
-		it("should save a configuration", () => {
+        it("should save a configuration", () => {
 
-			return conf.fileExists().then((exists) => {
+            return conf.fileExists().then((exists) => {
 
-				assert.strictEqual(exists, false, "check file existance failed");
+                assert.strictEqual(exists, false, "check file existance failed");
 
-				return conf.save();
+                return conf.save();
 
-			});
+            });
 
-		});
+        });
 
-	});
+    });
 
-	describe("with file", () => {
+    describe("with file", () => {
 
-		const conf = new NodeConfManager(CONF_FILE);
+        const conf = new NodeConfManager(CONF_FILE);
 
-		beforeEach(() => {
+        beforeEach(() => {
 
-			conf.clear();
+            conf.clear();
 
-			return conf.deleteFile();
+            return conf.deleteFile();
 
-		});
+        });
 
-		after(() => {
+        after(() => {
 
-			conf.clear();
+            conf.clear();
 
-			return conf.deleteFile();
+            return conf.deleteFile();
 
-		});
+        });
 
-		it("should save a configuration", () => {
+        it("should save a configuration", () => {
 
-			return conf.fileExists().then((exists) => {
+            return conf.fileExists().then((exists) => {
 
-				assert.strictEqual(exists, false, "check file existance failed");
+                assert.strictEqual(exists, false, "check file existance failed");
 
-				return exists ? Promise.resolve() : conf
-					.set("usr", {
-						"login": "login",
-						"pwd": "pwd"
-					})
-					.set("debug", "n")
-					.set("authors", [ "author1", "author2" ])
-					.save();
+                return exists ? Promise.resolve() : conf
+                    .set("usr", {
+                        "login": "login",
+                        "pwd": "pwd"
+                    })
+                    .set("debug", "n")
+                    .set("authors", [ "author1", "author2" ])
+                    .save();
 
-			});
+            });
 
-		});
+        });
 
-		it("should save a configuration with spaces", () => {
+        it("should save a configuration with spaces", () => {
 
-			conf.spaces = true;
+            conf.spaces = true;
 
-			return conf.fileExists().then((exists) => {
+            return conf.fileExists().then((exists) => {
 
-				assert.strictEqual(exists, false, "check file existance failed");
+                assert.strictEqual(exists, false, "check file existance failed");
 
-				return exists ? Promise.resolve() : conf
-					.set("usr", {
-						"login": "login",
-						"pwd": "pwd"
-					})
-					.set("debug", "n")
-					.set("authors", [ "author1", "author2" ])
-					.save();
+                return exists ? Promise.resolve() : conf
+                    .set("usr", {
+                        "login": "login",
+                        "pwd": "pwd"
+                    })
+                    .set("debug", "n")
+                    .set("authors", [ "author1", "author2" ])
+                    .save();
 
-			});
+            });
 
-		});
+        });
 
-		it("should save a configuration without file", () => {
+        it("should save a configuration without file", () => {
 
-			conf._filePath = "";
+            conf._filePath = "";
 
-			return conf.save();
+            return conf.save();
 
-		});
+        });
 
-	});
+    });
 
 });

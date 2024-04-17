@@ -2,9 +2,7 @@ import NodeContainerPattern = require("node-containerpattern");
 export default class ConfManager extends NodeContainerPattern {
     filePath: string;
     spaces: boolean;
-    shortcuts: {
-        [key: string]: string;
-    };
+    shortcuts: Record<string, string>;
     constructor(filePath: string, spaces?: boolean, recursionSeparator?: string);
     private _loadFromConsole;
     clear(): void;

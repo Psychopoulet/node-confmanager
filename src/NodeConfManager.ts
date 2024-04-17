@@ -94,7 +94,7 @@ export default class ConfManager extends NodeContainerPattern {
                     }
 
                     // array
-                    else if (this.skeletons[key] && "array" === this.skeletons[key]) {
+                    else if ("undefined" !== typeof this.skeletons[key] && "array" === this.skeletons[key]) {
 
                         const nextArgs: string[] = args.slice(i + 1, args.length);
 
@@ -102,8 +102,8 @@ export default class ConfManager extends NodeContainerPattern {
 
                             const endArrayArgs: number = nextArgs.findIndex((a: string): boolean => {
 
-                                return a.startsWith("--") ||
-                                    (a.startsWith("-") && !!this.shortcuts[a.slice(1)]);
+                                return a.startsWith("--")
+                                    || (a.startsWith("-") && !!this.shortcuts[a.slice(1)]);
 
                             });
 
@@ -181,8 +181,8 @@ export default class ConfManager extends NodeContainerPattern {
             else {
 
                 return readFile(this.filePath, "utf-8").then((content: string): Record<string, any> => {
-                    return JSON.parse(content);
-                }).then((data: Record<string, any>): void => {
+                    return JSON.parse(content) as Record<string, any>;
+                }).then((data: Record<string, any>): undefined => {
 
                     for (const key in data) {
                         this.set(key, data[key]);
@@ -212,9 +212,9 @@ export default class ConfManager extends NodeContainerPattern {
                 objects[key] = value;
             });
 
-            return this.spaces ?
-                writeFile(this.filePath, JSON.stringify(objects, undefined, 2), "utf-8") :
-                writeFile(this.filePath, JSON.stringify(objects), "utf-8");
+            return this.spaces
+                ? writeFile(this.filePath, JSON.stringify(objects, undefined, 2), "utf-8")
+                : writeFile(this.filePath, JSON.stringify(objects), "utf-8");
 
         });
 
