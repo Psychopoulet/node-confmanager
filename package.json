@@ -1,7 +1,7 @@
 {
 
   "name": "node-confmanager",
-  "version": "1.8.2",
+  "version": "1.9.0",
   "description": "A configuration manager",
 
   "type": "commonjs",
@@ -43,7 +43,7 @@
   },
 
   "dependencies": {
-    "node-containerpattern": "1.7.6"
+    "node-containerpattern": "1.8.0"
   },
   "devDependencies": {
     "@types/node": "20.11.0",
