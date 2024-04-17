@@ -1,46 +1,44 @@
-"use strict";
-
 // deps
 
-	// natives
-	const { join } = require("node:path");
-	const assert = require("node:assert");
+    // natives
+    const { join } = require("node:path");
+    const assert = require("node:assert");
 
-	// locals
-	const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
+    // locals
+    const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // consts
 
-	const CONF_FILE = join(__dirname, "conf.json");
+    const CONF_FILE = join(__dirname, "conf.json");
 
 // tests
 
 describe("set", () => {
 
-	const conf = new NodeConfManager(CONF_FILE, true);
+    const conf = new NodeConfManager(CONF_FILE, true);
 
-	before(() => {
+    before(() => {
 
-		conf.clear();
+        conf.clear();
 
-		return conf.deleteFile();
+        return conf.deleteFile();
 
-	});
+    });
 
-	after(() => {
+    after(() => {
 
-		conf.clear();
+        conf.clear();
 
-		return conf.deleteFile();
+        return conf.deleteFile();
 
-	});
+    });
 
-	it("should set a value", () => {
+    it("should set a value", () => {
 
-		assert.throws(() => {
-			conf.set(15);
-		}, Error, "check type value does not throw an error");
+        assert.throws(() => {
+            conf.set(15);
+        }, Error, "check type value does not throw an error");
 
-	});
+    });
 
 });

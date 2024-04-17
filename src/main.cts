@@ -1,9 +1,7 @@
-"use strict";
-
 // deps
 
-	// locals
-	import NodeConfManager from "./NodeConfManager";
+    // locals
+    import NodeConfManager from "./NodeConfManager";
 
 // module
 

@@ -1,60 +1,58 @@
-"use strict";
-
 // deps
 
-	// natives
-	const { join } = require("node:path");
-	const assert = require("node:assert");
+    // natives
+    const { join } = require("node:path");
+    const assert = require("node:assert");
 
-	// locals
-	const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
+    // locals
+    const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // consts
 
-	const CONF_FILE = join(__dirname, "conf.json");
+    const CONF_FILE = join(__dirname, "conf.json");
 
 // tests
 
 describe("fileExists", () => {
 
-	after(() => {
+    after(() => {
 
-		const conf = new NodeConfManager(CONF_FILE);
+        const conf = new NodeConfManager(CONF_FILE);
 
-		conf.clear();
+        conf.clear();
 
-		return conf.deleteFile();
+        return conf.deleteFile();
 
-	});
+    });
 
-	it("should check file existance without file", () => {
+    it("should check file existance without file", () => {
 
-		return new NodeConfManager().fileExists().then((exists) => {
-			assert.strictEqual(exists, false, "check file existance failed"); return Promise.resolve();
-		});
+        return new NodeConfManager().fileExists().then((exists) => {
+            assert.strictEqual(exists, false, "check file existance failed"); return Promise.resolve();
+        });
 
-	});
+    });
 
-	it("should check file existance with file", () => {
+    it("should check file existance with file", () => {
 
-		return new NodeConfManager(CONF_FILE).fileExists().then((exists) => {
-			assert.strictEqual(exists, false, "check file existance failed"); return Promise.resolve();
-		});
+        return new NodeConfManager(CONF_FILE).fileExists().then((exists) => {
+            assert.strictEqual(exists, false, "check file existance failed"); return Promise.resolve();
+        });
 
-	});
+    });
 
-	it("should check file existance with saved file", () => {
+    it("should check file existance with saved file", () => {
 
-		const Conf = new NodeConfManager(CONF_FILE);
+        const Conf = new NodeConfManager(CONF_FILE);
 
-		return Conf.save().then(() => {
+        return Conf.save().then(() => {
 
-			return Conf.fileExists().then((exists) => {
-				assert.strictEqual(exists, true, "check file existance failed"); return Promise.resolve();
-			});
+            return Conf.fileExists().then((exists) => {
+                assert.strictEqual(exists, true, "check file existance failed"); return Promise.resolve();
+            });
 
-		});
+        });
 
-	});
+    });
 
 });
