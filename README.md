@@ -1,12 +1,17 @@
 # node-confmanager
 A configuration manager
 
-[![Build status](https://api.travis-ci.org/Psychopoulet/node-confmanager.svg?branch=master)](https://travis-ci.org/Psychopoulet/node-confmanager)
-[![Coverage status](https://coveralls.io/repos/github/Psychopoulet/node-confmanager/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/node-confmanager)
-[![Dependency status](https://david-dm.org/Psychopoulet/node-confmanager/status.svg)](https://david-dm.org/Psychopoulet/node-confmanager)
-[![Dev dependency status](https://david-dm.org/Psychopoulet/node-confmanager/dev-status.svg)](https://david-dm.org/Psychopoulet/node-confmanager?type=dev)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_node-confmanager&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_node-confmanager)
 [![Issues](https://img.shields.io/github/issues/Psychopoulet/node-confmanager.svg)](https://github.com/Psychopoulet/node-confmanager/issues)
 [![Pull requests](https://img.shields.io/github/issues-pr/Psychopoulet/node-confmanager.svg)](https://github.com/Psychopoulet/node-confmanager/pulls)
+
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_node-confmanager&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_node-confmanager)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_node-confmanager&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_node-confmanager)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_node-confmanager&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_node-confmanager)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_node-confmanager&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_node-confmanager)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_node-confmanager&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_node-confmanager)
+
+[![Known Vulnerabilities](https://snyk.io/test/github/Psychopoulet/node-confmanager/badge.svg)](https://snyk.io/test/github/Psychopoulet/node-confmanager)
 
 ## Installation
 
