@@ -2,7 +2,7 @@
 
     // natives
     const { join } = require("node:path");
-    const assert = require("node:assert");
+    const { throws, ok } = require("node:assert");
 
     // locals
     const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
@@ -39,11 +39,11 @@ describe("shortcut", () => {
 
     it("should test wrong binds", () => {
 
-        assert.throws(() => {
+        throws(() => {
             conf.shortcut(false, "t");
         }, Error, "check type value does not throw an error");
 
-        assert.throws(() => {
+        throws(() => {
             conf.shortcut("", "t");
         }, Error, "check type value does not throw an error");
 
@@ -51,14 +51,12 @@ describe("shortcut", () => {
 
     it("should bind shortcut", () => {
 
-        assert.strictEqual(
-            conf.set("test", "test").shortcut("test", "t") instanceof NodeConfManager, true,
-            "return data is not an instanceof NodeConfManager"
+        ok(
+            conf.set("test", "test").shortcut("test", "t") instanceof NodeConfManager
         );
 
-        assert.strictEqual(
-            conf.set("test", "test").shortcut("TEST", "T") instanceof NodeConfManager, true,
-            "return data is not an instanceof NodeConfManager"
+        ok(
+            conf.set("test", "test").shortcut("TEST", "T") instanceof NodeConfManager
         );
 
     });

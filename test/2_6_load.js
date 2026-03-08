@@ -2,7 +2,7 @@
 
     // natives
     const { join } = require("node:path");
-    const assert = require("node:assert");
+    const { strictEqual, deepStrictEqual, ok } = require("node:assert");
 
     // locals
     const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
@@ -73,7 +73,7 @@ describe("load", () => {
 
             return conf.fileExists().then((exists) => {
 
-                assert.strictEqual(exists, false, "check file existance failed");
+                strictEqual(exists, false, "check file existance failed");
 
                 return conf
                     .set("usr", {
@@ -92,11 +92,11 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 3, "check 'size' loaded data failed");
+                strictEqual(conf.size, 3, "check 'size' loaded data failed");
 
-                assert.deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
-                assert.strictEqual(conf.get("debug"), false, "check 'debug' loaded data failed");
-                assert.deepStrictEqual(conf.get("usr"), {
+                deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
+                strictEqual(conf.get("debug"), false, "check 'debug' loaded data failed");
+                deepStrictEqual(conf.get("usr"), {
                     "login": "login",
                     "pwd": "pwd"
                 }, "check 'usr' loaded data failed");
@@ -104,7 +104,7 @@ describe("load", () => {
                 return conf.fileExists();
 
             }).then((exists) => {
-                assert.strictEqual(exists, true, "check file existance failed");
+                ok(exists);
             });
 
         });
@@ -151,8 +151,8 @@ describe("load", () => {
                 done(new Error("Does not generate an error"));
             }).catch((err) => {
 
-                assert.strictEqual(typeof err, "object", "Generated error is not an object");
-                assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+                strictEqual(typeof err, "object", "Generated error is not an object");
+                ok(err instanceof Error);
 
                 done();
 
@@ -168,8 +168,8 @@ describe("load", () => {
                 done(new Error("Does not generate an error"));
             }).catch((err) => {
 
-                assert.strictEqual(typeof err, "object", "Generated error is not an object");
-                assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+                strictEqual(typeof err, "object", "Generated error is not an object");
+                ok(err instanceof Error);
 
                 done();
 
@@ -186,8 +186,8 @@ describe("load", () => {
                 done(new Error("Does not generate an error"));
             }).catch((err) => {
 
-                assert.strictEqual(typeof err, "object", "Generated error is not an object");
-                assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+                strictEqual(typeof err, "object", "Generated error is not an object");
+                ok(err instanceof Error);
 
                 done();
 
@@ -204,8 +204,8 @@ describe("load", () => {
                 done(new Error("Does not generate an error"));
             }).catch((err) => {
 
-                assert.strictEqual(typeof err, "object", "Generated error is not an object");
-                assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+                strictEqual(typeof err, "object", "Generated error is not an object");
+                ok(err instanceof Error);
 
                 done();
 
@@ -227,7 +227,7 @@ describe("load", () => {
 
             return conf.load().then(() => {
 
-                assert.strictEqual(conf.get("debug"), true);
+                ok(conf.get("debug"));
 
             });
 
@@ -241,8 +241,8 @@ describe("load", () => {
                 done(new Error("Does not generate an error"));
             }).catch((err) => {
 
-                assert.strictEqual(typeof err, "object", "Generated error is not an object");
-                assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+                strictEqual(typeof err, "object", "Generated error is not an object");
+                ok(err instanceof Error);
 
                 done();
 
@@ -259,8 +259,8 @@ describe("load", () => {
                 done(new Error("Does not generate an error"));
             }).catch((err) => {
 
-                assert.strictEqual(typeof err, "object", "Generated error is not an object");
-                assert.strictEqual(err instanceof Error, true, "Generated error is not an instance of Error");
+                strictEqual(typeof err, "object", "Generated error is not an object");
+                ok(err instanceof Error);
 
                 done();
 
@@ -275,7 +275,7 @@ describe("load", () => {
 
             return conf.load().then(() => {
 
-                assert.deepStrictEqual(conf.get("plugins"), [ "test1", "test2" ]);
+                deepStrictEqual(conf.get("plugins"), [ "test1", "test2" ]);
 
             });
 
@@ -289,7 +289,7 @@ describe("load", () => {
 
             return conf.load().then(() => {
 
-                assert.deepStrictEqual(conf.get("plugins"), [ "test1", "test2" ]);
+                deepStrictEqual(conf.get("plugins"), [ "test1", "test2" ]);
 
             });
 
@@ -311,10 +311,10 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 3, "check loaded data failed (size)");
+                strictEqual(conf.size, 3, "check loaded data failed (size)");
 
-                assert.strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
-                assert.deepStrictEqual(conf.get("usr"), {
+                strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
+                deepStrictEqual(conf.get("usr"), {
                     "login": "login",
                     "pwd": "pwd"
                 }, "check 'usr' loaded data failed");
@@ -332,10 +332,10 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 2, "check loaded data failed (size)");
+                strictEqual(conf.size, 2, "check loaded data failed (size)");
 
-                assert.strictEqual(conf.get("debug"), true, "check loaded data failed (debug)");
-                assert.strictEqual(conf.get("test"), "test2", "check loaded data failed (test)");
+                ok(conf.get("debug"));
+                strictEqual(conf.get("test"), "test2", "check loaded data failed (test)");
 
                 return Promise.resolve();
 
@@ -359,11 +359,11 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 3, "check loaded data failed (size)");
+                strictEqual(conf.size, 3, "check loaded data failed (size)");
 
-                assert.deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
-                assert.strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
-                assert.deepStrictEqual(conf.get("usr"), {
+                deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
+                strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
+                deepStrictEqual(conf.get("usr"), {
                     "login": "login",
                     "pwd": "pwd"
                 }, "check 'usr' loaded data failed");
@@ -381,10 +381,10 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 2, "check loaded data failed (size)");
+                strictEqual(conf.size, 2, "check loaded data failed (size)");
 
-                assert.strictEqual(conf.get("debug"), true, "check loaded data failed (debug)");
-                assert.strictEqual(conf.get("test"), "test2", "check loaded data failed (test)");
+                ok(conf.get("debug"));
+                strictEqual(conf.get("test"), "test2", "check loaded data failed (test)");
 
                 return Promise.resolve();
 
@@ -402,8 +402,8 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 1, "check loaded data failed (size)");
-                assert.strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
+                strictEqual(conf.size, 1, "check loaded data failed (size)");
+                strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
 
                 return Promise.resolve();
 
@@ -417,8 +417,8 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 1, "check loaded data failed (size)");
-                assert.strictEqual(conf.get("debug"), true, "check loaded data failed (debug)");
+                strictEqual(conf.size, 1, "check loaded data failed (size)");
+                ok(conf.get("debug"));
 
                 return Promise.resolve();
 
@@ -442,11 +442,11 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 3, "check loaded data failed (size)");
+                strictEqual(conf.size, 3, "check loaded data failed (size)");
 
-                assert.deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
-                assert.strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
-                assert.deepStrictEqual(conf.get("usr"), {
+                deepStrictEqual(conf.get("authors"), [ "author1", "author2" ], "check 'authors' loaded data failed");
+                strictEqual(conf.get("debug"), false, "check loaded data failed (debug)");
+                deepStrictEqual(conf.get("usr"), {
                     "login": "login",
                     "pwd": "pwd"
                 }, "check 'usr' loaded data failed");
@@ -464,14 +464,14 @@ describe("load", () => {
 
             }).then(() => {
 
-                assert.strictEqual(conf.size, 2, "check loaded data failed (size)");
+                strictEqual(conf.size, 2, "check loaded data failed (size)");
 
-                assert.deepStrictEqual(conf.get("lvl1"), {
+                deepStrictEqual(conf.get("lvl1"), {
                     "lvl2": {
                         "lvl3": "test"
                     }
                 }, "check 'lvl1' loaded data failed");
-                assert.deepStrictEqual(conf.get("usr"), {
+                deepStrictEqual(conf.get("usr"), {
                     "login": "login2"
                 }, "check 'usr' loaded data failed");
 

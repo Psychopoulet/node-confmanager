@@ -2,7 +2,7 @@
 
     // natives
     const { join } = require("node:path");
-    const { strictEqual } = require("node:assert");
+    const { strictEqual, ok } = require("node:assert");
 
     // locals
     const isFile = require(join(__dirname, "..", "lib", "cjs", "utils", "isFile.js")).default;
@@ -18,7 +18,7 @@ describe("isFile", () => {
         }).catch((err) => {
 
             strictEqual(typeof err, "object");
-            strictEqual(err instanceof ReferenceError, true);
+            ok(err instanceof ReferenceError);
 
             done();
 
@@ -33,7 +33,7 @@ describe("isFile", () => {
         }).catch((err) => {
 
             strictEqual(typeof err, "object");
-            strictEqual(err instanceof TypeError, true);
+            ok(err instanceof TypeError);
 
             done();
 
@@ -48,7 +48,7 @@ describe("isFile", () => {
         }).catch((err) => {
 
             strictEqual(typeof err, "object");
-            strictEqual(err instanceof Error, true);
+            ok(err instanceof Error);
 
             done();
 
@@ -61,7 +61,7 @@ describe("isFile", () => {
         return isFile(__filename).then((exists) => {
 
             strictEqual(typeof exists, "boolean");
-            strictEqual(exists, true);
+            ok(exists);
 
         });
 

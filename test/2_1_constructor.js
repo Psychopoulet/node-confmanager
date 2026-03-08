@@ -2,7 +2,7 @@
 
     // natives
     const { join } = require("node:path");
-    const assert = require("node:assert");
+    const { throws } = require("node:assert");
 
     // locals
     const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
@@ -13,11 +13,11 @@ describe("constructor", () => {
 
     it("should check filePath", () => {
 
-        assert.throws(() => {
+        throws(() => {
             new NodeConfManager(false).clear();
         }, TypeError, "check 'filePath' type value does not throw an error");
 
-        assert.throws(() => {
+        throws(() => {
             new NodeConfManager("").clear();
         }, Error, "check 'filePath' type value does not throw an error");
 
@@ -25,7 +25,7 @@ describe("constructor", () => {
 
     it("should check spaces", () => {
 
-        assert.throws(() => {
+        throws(() => {
             new NodeConfManager("test", "test").clear();
         }, TypeError, "check 'spaces' type value does not throw an error");
 
@@ -33,11 +33,11 @@ describe("constructor", () => {
 
     it("should check recursionSeparator", () => {
 
-        assert.throws(() => {
+        throws(() => {
             new NodeConfManager("test", false, false).clear();
         }, TypeError, "check 'recursionSeparator' type value does not throw an error");
 
-        assert.throws(() => {
+        throws(() => {
             new NodeConfManager("test", false, "").clear();
         }, Error, "check 'recursionSeparator' type value does not throw an error");
 

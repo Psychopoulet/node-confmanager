@@ -2,7 +2,7 @@
 
     // natives
     const { join } = require("node:path");
-    const assert = require("node:assert");
+    const { throws } = require("node:assert");
 
     // locals
     const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
@@ -35,7 +35,7 @@ describe("set", () => {
 
     it("should set a value", () => {
 
-        assert.throws(() => {
+        throws(() => {
             conf.set(15);
         }, Error, "check type value does not throw an error");
 

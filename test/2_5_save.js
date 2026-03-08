@@ -2,7 +2,7 @@
 
     // natives
     const { join } = require("node:path");
-    const assert = require("node:assert");
+    const { strictEqual } = require("node:assert");
 
     // locals
     const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
@@ -23,7 +23,7 @@ describe("save", () => {
 
             return conf.fileExists().then((exists) => {
 
-                assert.strictEqual(exists, false, "check file existance failed");
+                strictEqual(exists, false, "check file existance failed");
 
                 return conf.save();
 
@@ -57,7 +57,7 @@ describe("save", () => {
 
             return conf.fileExists().then((exists) => {
 
-                assert.strictEqual(exists, false, "check file existance failed");
+                strictEqual(exists, false, "check file existance failed");
 
                 return exists ? Promise.resolve() : conf
                     .set("usr", {
@@ -78,7 +78,7 @@ describe("save", () => {
 
             return conf.fileExists().then((exists) => {
 
-                assert.strictEqual(exists, false, "check file existance failed");
+                strictEqual(exists, false, "check file existance failed");
 
                 return exists ? Promise.resolve() : conf
                     .set("usr", {
