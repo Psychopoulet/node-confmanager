@@ -5,7 +5,7 @@
     import { unlink, readFile, writeFile, mkdir } from "node:fs/promises";
 
     // externals
-    import NodeContainerPattern = require("node-containerpattern");
+    import NodeContainerPattern from "node-containerpattern";
 
     // locals
     import checkShortcut from "./utils/checkShortcut";
@@ -31,7 +31,7 @@ export default class ConfManager extends NodeContainerPattern {
         if ("undefined" !== typeof filePath && "string" !== typeof filePath) {
             throw new TypeError("\"filePath\" parameter is not a string");
         }
-        else if ("undefined" !== typeof filePath && "" === filePath.trim()) {
+        else if ("" === filePath.trim()) {
             throw new Error("\"filePath\" parameter is empty");
         }
 
@@ -42,7 +42,7 @@ export default class ConfManager extends NodeContainerPattern {
         else if ("undefined" !== typeof recursionSeparator && "string" !== typeof recursionSeparator) {
             throw new TypeError("The \"recursionSeparator\" parameter is not a string");
         }
-        else if ("undefined" !== typeof recursionSeparator && "" === recursionSeparator.trim()) {
+        else if ("" === recursionSeparator.trim()) {
             throw new Error("\"recursionSeparator\" parameter is empty");
         }
 

@@ -1,4 +1,4 @@
-import NodeContainerPattern = require("node-containerpattern");
+import NodeContainerPattern from "node-containerpattern";
 export default class ConfManager extends NodeContainerPattern {
     filePath: string;
     spaces: boolean;
