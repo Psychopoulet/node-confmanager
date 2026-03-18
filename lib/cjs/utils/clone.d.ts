@@ -1,1 +1,1 @@
-export default function clone(from: any): any;
+export default function clone(from: unknown): unknown;

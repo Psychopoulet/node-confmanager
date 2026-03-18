@@ -2,7 +2,7 @@
 
     // natives
     const { join } = require("node:path");
-    const assert = require("node:assert");
+    const { strictEqual } = require("node:assert");
 
     // locals
     const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
@@ -42,12 +42,12 @@ describe("get", () => {
 
         const usr = conf.get("usr");
 
-        assert.strictEqual(usr.login, "login", "check file existance failed");
+        strictEqual(usr.login, "login", "check file existance failed");
 
         usr.login = "login2";
 
-        assert.strictEqual(usr.login, "login2", "check file existance failed");
-        assert.strictEqual(conf.get("usr").login, "login", "check file existance failed");
+        strictEqual(usr.login, "login2", "check file existance failed");
+        strictEqual(conf.get("usr").login, "login", "check file existance failed");
 
     });
 

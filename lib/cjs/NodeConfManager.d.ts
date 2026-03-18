@@ -1,4 +1,4 @@
-import NodeContainerPattern = require("node-containerpattern");
+import NodeContainerPattern from "node-containerpattern";
 export default class ConfManager extends NodeContainerPattern {
     filePath: string;
     spaces: boolean;
@@ -9,7 +9,7 @@ export default class ConfManager extends NodeContainerPattern {
     clearShortcuts(): this;
     deleteFile(): Promise<void>;
     fileExists(): Promise<boolean>;
-    get(key: string): any;
+    get(key: string): unknown;
     load(loadConsole?: boolean): Promise<void>;
     save(): Promise<void>;
     shortcut(_key: string, _shortkey: string): this;
