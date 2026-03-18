@@ -20,7 +20,7 @@ export default function isFile (file: string): Promise<boolean> {
             }
         else {
 
-            lstat(file, (err: Error | null, stats: Stats): void => {
+            lstat(file, (err: NodeJS.ErrnoException | null, stats: Stats): void => {
                 return resolve(Boolean(!err && stats.isFile()));
             });
 
