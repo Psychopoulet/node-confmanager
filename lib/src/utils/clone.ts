@@ -1,22 +1,22 @@
 // module
 
-export default function clone (from: any): any {
+export default function clone (from: unknown): unknown {
 
-    if (from && "object" === typeof from) {
+    if ("object" === typeof from && null !== from) {
 
         if (Object === from.constructor) {
             return { ...from };
         }
         else if (Array.isArray(from)) {
-            return [ ...from ];
+            return [ ...from as unknown[] ];
         }
         else {
-            return new from.constructor(from);
+            const FromConstructor = from.constructor as new (arg: unknown) => unknown;
+            return new FromConstructor(from);
         }
 
     }
-    else {
-        return from;
-    }
+
+    return from;
 
 }

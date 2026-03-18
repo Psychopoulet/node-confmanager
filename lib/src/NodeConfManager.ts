@@ -31,8 +31,8 @@ export default class ConfManager extends NodeContainerPattern {
         if ("undefined" !== typeof filePath && "string" !== typeof filePath) {
             throw new TypeError("\"filePath\" parameter is not a string");
         }
-        else if ("" === filePath.trim()) {
-            throw new Error("\"filePath\" parameter is empty");
+        else if ("string" === typeof filePath && "" === filePath.trim()) {
+            throw new RangeError("\"filePath\" parameter is empty");
         }
 
         else if ("undefined" !== typeof spaces && "boolean" !== typeof spaces) {
@@ -42,8 +42,8 @@ export default class ConfManager extends NodeContainerPattern {
         else if ("undefined" !== typeof recursionSeparator && "string" !== typeof recursionSeparator) {
             throw new TypeError("The \"recursionSeparator\" parameter is not a string");
         }
-        else if ("" === recursionSeparator.trim()) {
-            throw new Error("\"recursionSeparator\" parameter is empty");
+        else if ("string" === typeof recursionSeparator && "" === recursionSeparator.trim()) {
+            throw new RangeError("\"recursionSeparator\" parameter is empty");
         }
 
         else {
@@ -78,7 +78,7 @@ export default class ConfManager extends NodeContainerPattern {
                     const key: string = isShortcut ? this.shortcuts[argument] : argument;
 
                     // boolean
-                    if (this.skeletons[key] && "boolean" === this.skeletons[key]) {
+                    if ("string" === typeof this.skeletons[key] && "boolean" === this.skeletons[key]) {
                         this.set(key, true);
                     }
 
@@ -103,7 +103,7 @@ export default class ConfManager extends NodeContainerPattern {
                             const endArrayArgs: number = nextArgs.findIndex((a: string): boolean => {
 
                                 return a.startsWith("--")
-                                    || (a.startsWith("-") && !!this.shortcuts[a.slice(1)]);
+                                    || (a.startsWith("-") && Boolean(this.shortcuts[a.slice(1)]));
 
                             });
 
@@ -160,7 +160,7 @@ export default class ConfManager extends NodeContainerPattern {
     }
 
     // Container.get with cloned data
-    public get (key: string): any {
+    public get (key: string): unknown {
         return clone(super.get(key));
     }
 
@@ -169,31 +169,26 @@ export default class ConfManager extends NodeContainerPattern {
 
         this.clearData();
 
-        return this.fileExists().then((exists: boolean): Promise<void> | void => {
+        return this.fileExists().then((exists: boolean): Promise<void> => {
 
             if (!exists) {
+                return Promise.resolve();
+            }
 
-                if (loadConsole) {
-                    this._loadFromConsole();
+            return readFile(this.filePath, "utf-8").then((content: string): Record<string, unknown> => {
+                return JSON.parse(content) as Record<string, unknown>;
+            }).then((data: Record<string, unknown>): undefined => {
+
+                for (const key in data) {
+                    this.set(key, data[key]);
                 }
 
-            }
-            else {
+            });
 
-                return readFile(this.filePath, "utf-8").then((content: string): Record<string, any> => {
-                    return JSON.parse(content) as Record<string, any>;
-                }).then((data: Record<string, any>): undefined => {
+        }).then(() => {
 
-                    for (const key in data) {
-                        this.set(key, data[key]);
-                    }
-
-                    if (loadConsole) {
-                        this._loadFromConsole();
-                    }
-
-                });
-
+            if (loadConsole) {
+                this._loadFromConsole();
             }
 
         });
@@ -207,8 +202,8 @@ export default class ConfManager extends NodeContainerPattern {
             "recursive": true
         }).then((): Promise<void> => {
 
-            const objects: Record<string, any> = {};
-            this.forEach((value: any, key: string): void => {
+            const objects: Record<string, unknown> = {};
+            this.forEach((value: unknown, key: string): void => {
                 objects[key] = value;
             });
 
