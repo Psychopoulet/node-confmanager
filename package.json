@@ -48,7 +48,7 @@
   },
 
   "dependencies": {
-    "node-containerpattern": "1.10.0"
+    "node-containerpattern": "1.11.0"
   },
   "devDependencies": {
     "@types/node": "25.6.0",
