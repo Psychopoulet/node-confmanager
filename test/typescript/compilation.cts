@@ -37,6 +37,7 @@ conf.fileExists().then((exists: boolean): Promise<void> => {
 }).then((): Promise<void> => {
 
 	console.log(conf.get("debug"));
+	console.log(conf.get<boolean>("debug"));
 	console.log(conf.get("usr.login"));
 
 	conf.clear();
