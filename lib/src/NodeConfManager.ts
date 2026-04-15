@@ -160,8 +160,8 @@ export default class ConfManager extends NodeContainerPattern {
     }
 
     // Container.get with cloned data
-    public get (key: string): unknown {
-        return clone(super.get(key));
+    public get <T = unknown> (key: string): T {
+        return clone<T>(super.get<T>(key));
     }
 
     // load data from conf file then commandline (commandline takeover)
