@@ -74,7 +74,7 @@ export default class ConfManager extends NodeContainerPattern {
 
                 const line: string = l.trim();
 
-                if (line.startsWith("#")) {
+                if (0 >= line.length || line.startsWith("#") || !line.includes("=")) {
                     return;
                 }
 
