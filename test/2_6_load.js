@@ -546,8 +546,18 @@ describe("load", () => {
         let conf = null;
 
         beforeEach(() => {
+
             conf = new NodeConfManager(NO_CONF_FILE);
+
             conf.clear();
+
+            conf.skeleton("mykey", "string")
+                .skeleton("uppercasekey", "string")
+                .skeleton("eqkey", "string")
+                .skeleton("first", "string")
+                .skeleton("second", "string")
+                .skeleton("key_after_bad_line", "string");
+
         });
 
         afterEach(() => {
@@ -685,7 +695,9 @@ describe("load", () => {
             envPrevious = hadEnvKey ? env[envKey] : "";
             env[envKey] = envVal;
             conf = new NodeConfManager(NO_CONF_FILE);
+
             conf.clear();
+            conf.skeleton(envKey.toLowerCase(), "string");
 
         });
 

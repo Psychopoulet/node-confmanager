@@ -63,11 +63,48 @@ export default class ConfManager extends NodeContainerPattern {
 
     // private
 
+    /**
+     * Keys allowed for process.env / env-file loading: union of schema registrations
+     * plus shortcut names that point at a registered key.
+     * Lowercase env names map to the canonical registered key (first match wins: skeletons, then limits, mins, maxs, regexs, documentations).
+     */
+    private _registeredEnvKeyByLower (): Map<string, string> {
+
+        const out: Map<string, string> = new Map<string, string>();
+
+        function merge (record: Record<string, unknown>): void {
+
+            for (const k of Object.keys(record)) {
+
+                const trimmed = k.trim();
+                const lower = trimmed.toLowerCase();
+
+                if (!out.has(lower)) {
+                    out.set(lower, trimmed);
+                }
+
+            }
+
+        }
+
+        merge(this.skeletons as Record<string, unknown>);
+        merge(this.limits as Record<string, unknown>);
+        merge(this.mins as Record<string, unknown>);
+        merge(this.maxs as Record<string, unknown>);
+        merge(this.regexs as Record<string, unknown>);
+        merge(this.documentations as Record<string, unknown>);
+        merge(this.shortcuts as Record<string, unknown>);
+
+        return out;
+
+    }
+
     private _loadFromEnvFile (file: string): Promise<void> {
 
         return new Promise((resolve: () => void, reject: (error: Error) => void) => {
 
             let stop = false;
+            const allow = this._registeredEnvKeyByLower();
 
             const input = createReadStream(file);
 
@@ -86,9 +123,14 @@ export default class ConfManager extends NodeContainerPattern {
                 }
 
                 const [ key, value ]: string[] = line.split("=");
+                const canonical = allow.get(key.trim().toLowerCase());
 
                 try {
-                    this.set(key.trim().toLocaleLowerCase(), value);
+
+                    if (undefined !== canonical) {
+                        this.set(canonical, value);
+                    }
+
                 }
                 catch (e: unknown) {
 
@@ -129,8 +171,16 @@ export default class ConfManager extends NodeContainerPattern {
 
     private _loadFromEnv (): void {
 
+        const allow = this._registeredEnvKeyByLower();
+
         Object.keys(process.env).forEach((key: string): void => {
-            this.set(key.trim().toLocaleLowerCase(), process.env[key]);
+
+            const canonical = allow.get(key.trim().toLowerCase());
+
+            if (undefined !== canonical) {
+                this.set(canonical, process.env[key]);
+            }
+
         });
 
     }
@@ -243,7 +293,7 @@ export default class ConfManager extends NodeContainerPattern {
     public load (options: boolean //
         | {
             "loadConsole"?: boolean; // load data from conf file then commandline (default : true)
-            "loadEnv"?: boolean; // load data from ENV (default : true)
+            "loadEnv"?: boolean; // load data from ENV for schema-registered keys only (default : true)
             "loadEnvFile"?: string; // load data from env file (default : "" => no load)
         } = {
             "loadConsole": true,
