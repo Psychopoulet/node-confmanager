@@ -67,10 +67,17 @@ export default class ConfManager extends NodeContainerPattern {
 
         return new Promise((resolve: () => void, reject: (error: Error) => void) => {
 
-            createInterface({
-                "input": createReadStream(file),
+            let stop = false;
+
+            const input = createReadStream(file);
+
+            // To stop reading early from inside "line", call rl.close(); "close" then fires and the Promise resolves.
+            const rl = createInterface({
+                "input": input,
                 "crlfDelay": Infinity
-            }).on("line", (l: string) => {
+            });
+
+            rl.on("line", (l: string) => {
 
                 const line: string = l.trim();
 
@@ -80,12 +87,40 @@ export default class ConfManager extends NodeContainerPattern {
 
                 const [ key, value ]: string[] = line.split("=");
 
-                this.set(key.trim().toLocaleLowerCase(), value);
+                try {
+                    this.set(key.trim().toLocaleLowerCase(), value);
+                }
+                catch (e: unknown) {
 
-            }).on("error", (error: Error): void => {
-                return reject(error);
-            }).on("close", (): void => {
-                return resolve();
+                    stop = true;
+
+                    if (e instanceof Error) {
+                        reject(e);
+                    }
+                    else {
+                        reject(new Error(String(e)));
+                    }
+
+                }
+
+            });
+
+            rl.on("error", (error: Error): void => {
+
+                if (!stop) {
+                    stop = true;
+                    reject(error);
+                }
+
+            });
+
+            rl.on("close", (): void => {
+
+                if (!stop) {
+                    stop = true;
+                    resolve();
+                }
+
             });
 
         });
