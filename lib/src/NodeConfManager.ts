@@ -4,6 +4,9 @@
     import { dirname } from "node:path";
     import { unlink, readFile, writeFile, mkdir } from "node:fs/promises";
 
+    import { createReadStream } from "node:fs";
+    import { createInterface } from "node:readline";
+
     // externals
     import NodeContainerPattern from "node-containerpattern";
 
@@ -59,6 +62,43 @@ export default class ConfManager extends NodeContainerPattern {
     }
 
     // private
+
+    private _loadFromEnvFile (file: string): Promise<void> {
+
+        return new Promise((resolve: () => void, reject: (error: Error) => void) => {
+
+            createInterface({
+                "input": createReadStream(file),
+                "crlfDelay": Infinity
+            }).on("line", (l: string) => {
+
+                const line: string = l.trim();
+
+                if (line.startsWith("#")) {
+                    return;
+                }
+
+                const [ key, value ]: string[] = line.split("=");
+
+                this.set(key.trim().toLocaleLowerCase(), value);
+
+            }).on("error", (error: Error): void => {
+                return reject(error);
+            }).on("close", (): void => {
+                return resolve();
+            });
+
+        });
+
+    }
+
+    private _loadFromEnv (): void {
+
+        Object.keys(process.env).forEach((key: string): void => {
+            this.set(key.trim().toLocaleLowerCase(), process.env[key]);
+        });
+
+    }
 
     private _loadFromConsole (): void {
 
@@ -164,8 +204,17 @@ export default class ConfManager extends NodeContainerPattern {
         return clone<T>(super.get<T>(key));
     }
 
-    // load data from conf file then commandline (commandline takeover)
-    public load (loadConsole: boolean = true): Promise<void> {
+    // prio : env > console > envfile > conf file
+    public load (options: boolean //
+        | {
+            "loadConsole"?: boolean; // load data from conf file then commandline (default : true)
+            "loadEnv"?: boolean; // load data from ENV (default : true)
+            "loadEnvFile"?: string; // load data from env file (default : "" => no load)
+        } = {
+            "loadConsole": true,
+            "loadEnv": true,
+            "loadEnvFile": ""
+        }): Promise<void> {
 
         this.clearData();
 
@@ -177,7 +226,7 @@ export default class ConfManager extends NodeContainerPattern {
 
             return readFile(this.filePath, "utf-8").then((content: string): Record<string, unknown> => {
                 return JSON.parse(content) as Record<string, unknown>;
-            }).then((data: Record<string, unknown>): undefined => {
+            }).then((data: Record<string, unknown>): void => {
 
                 for (const key in data) {
                     this.set(key, data[key]);
@@ -185,10 +234,25 @@ export default class ConfManager extends NodeContainerPattern {
 
             });
 
-        }).then(() => {
+        }).then(async () => {
 
-            if (loadConsole) {
+            if ("boolean" === typeof options && options) {
                 this._loadFromConsole();
+            }
+            else if ("object" === typeof options) {
+
+                if ("string" === typeof options.loadEnvFile && "" !== options.loadEnvFile.trim()) {
+                    await this._loadFromEnvFile(options.loadEnvFile);
+                }
+
+                if ("boolean" === typeof options.loadConsole && options.loadConsole) {
+                    this._loadFromConsole();
+                }
+
+                if ("boolean" === typeof options.loadEnv && options.loadEnv) {
+                    this._loadFromEnv();
+                }
+
             }
 
         });
