@@ -1,5 +1,5 @@
 # node-confmanager
-A configuration manager
+A configuration manager.
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_node-confmanager&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_node-confmanager)
 [![Issues](https://img.shields.io/github/issues/Psychopoulet/node-confmanager.svg)](https://github.com/Psychopoulet/node-confmanager/issues)
@@ -26,26 +26,30 @@ $ npm install node-confmanager
   * Saving the data in a JSON file
   * Load the data from this JSON file and/or commandline
   * access to the data with shortcuts in commandline
+  * load data from ENV data
+  * load data from specified env file (like ".env")
+  * prio : env > console > envfile > conf file
 
 ## Doc
 
-### Inheritance
+### Inheritance and behaviour
 
-[check the official 'node-containerpattern' object documentation](https://github.com/Psychopoulet/node-containerpattern)
+See the [node-containerpattern](https://github.com/Psychopoulet/node-containerpattern) documentation for skeletons, `set` / `get`, recursion, and validation.
 
-### Content
+### Types and implementation
 
-[check the TypeScript definition file](https://github.com/Psychopoulet/node-confmanager/blob/master/lib/index.d.ts)
+- Published typings: **`lib/cjs/main.d.cts`**
+- Implementation: [`lib/src/NodeConfManager.ts`](https://github.com/Psychopoulet/node-confmanager/blob/master/lib/src/NodeConfManager.ts)
 
 ## Examples
 
-[check the TypeScript compilation tests](https://github.com/Psychopoulet/node-confmanager/blob/master/test/typescript/compilation.ts)
+Full flow (save, load, typed `get`): [`test/typescript/compilation.cts`](https://github.com/Psychopoulet/node-confmanager/blob/master/test/typescript/compilation.cts)
 
-### Run
+### CLI usage
 
 ```bash
-# if "debug" skeleton is setted & defined as a boolean
-node mysoft.js -d      # if "debug" shortcut is setted
+# if "debug" skeleton is set and defined as a boolean
+node mysoft.js -d      # if "debug" shortcut is set with shortcut("debug", "d")
 node mysoft.js --debug
 node mysoft.js --debug "true"
 node mysoft.js --debug "yes"
@@ -53,17 +57,34 @@ node mysoft.js --debug "y"
 ```
 
 ```bash
-# if "arr" skeleton is defined as a array
+# if "arr" skeleton is defined as an array
 node mysoft.js --arr test1 test2
 node mysoft.js --arr "[ \"test1\", \"test2\" ]"
+```
+
+### Programmatic snippet
+
+```js
+const ConfManager = require("node-confmanager");
+const conf = new ConfManager("./config.json", true /* pretty JSON */);
+
+conf.skeleton("debug", "boolean").shortcut("debug", "d");
+
+await conf.load({
+  loadEnvFile: ".env",
+  loadConsole: true,
+  loadEnv: true,
+});
+
+await conf.set("name", "app").save();
 ```
 
 ## Tests
 
 ```bash
-$ npm run-script tests
+npm run tests
 ```
 
 ## License
 
-  [ISC](LICENSE)
+[ISC](LICENSE)
