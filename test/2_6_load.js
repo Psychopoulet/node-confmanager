@@ -271,7 +271,6 @@ describe("load", () => {
             (0, process).argv.push("--");
 
             return conf.load({
-                "loadConsole": true,
                 "loadEnv": false
             });
 
@@ -282,7 +281,6 @@ describe("load", () => {
             (0, process).argv.push("--debug");
 
             return conf.load({
-                "loadConsole": true,
                 "loadEnv": false
             }).then(() => {
 
@@ -727,6 +725,18 @@ describe("load", () => {
             }).then(() => {
 
                 strictEqual(conf.has(envKey.toLowerCase()), false);
+
+            });
+
+        });
+
+        it("should load from process.env when loadEnv is omitted (defaults to true)", () => {
+
+            return conf.load({
+                "loadConsole": false
+            }).then(() => {
+
+                strictEqual(conf.get(envKey.toLowerCase()), envVal);
 
             });
 

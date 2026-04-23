@@ -241,15 +241,20 @@ export default class ConfManager extends NodeContainerPattern {
             }
             else if ("object" === typeof options) {
 
-                if ("string" === typeof options.loadEnvFile && "" !== options.loadEnvFile.trim()) {
-                    await this._loadFromEnvFile(options.loadEnvFile);
+                // default values
+                const loadConsole: boolean = "boolean" === typeof options.loadConsole ? options.loadConsole : true;
+                const loadEnv: boolean = "boolean" === typeof options.loadEnv ? options.loadEnv : true;
+                const loadEnvFile: string = "string" === typeof options.loadEnvFile ? options.loadEnvFile : "";
+
+                if ("" !== loadEnvFile.trim()) {
+                    await this._loadFromEnvFile(loadEnvFile);
                 }
 
-                if ("boolean" === typeof options.loadConsole && options.loadConsole) {
+                if (loadConsole) {
                     this._loadFromConsole();
                 }
 
-                if ("boolean" === typeof options.loadEnv && options.loadEnv) {
+                if (loadEnv) {
                     this._loadFromEnv();
                 }
 
