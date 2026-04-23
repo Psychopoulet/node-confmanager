@@ -601,6 +601,55 @@ describe("load", () => {
 
         });
 
+        it("should ignore empty lines (and lines that trim to empty)", () => {
+
+            return writeFile(envTmp, [
+                "FIRST=one",
+                "",
+                "   ",
+                "",
+                "SECOND=two"
+            ].join("\n"), "utf-8").then(() => {
+
+                return conf.load({
+                    "loadEnvFile": envTmp,
+                    "loadConsole": false,
+                    "loadEnv": false
+                });
+
+            }).then(() => {
+
+                strictEqual(conf.get("first"), "one");
+                strictEqual(conf.get("second"), "two");
+                strictEqual(conf.size, 2);
+
+            });
+
+        });
+
+        it("should ignore lines without \"=\"", () => {
+
+            return writeFile(envTmp, [
+                "not a valid env line",
+                "KEY_AFTER_BAD_LINE=value"
+            ].join("\n"), "utf-8").then(() => {
+
+                return conf.load({
+                    "loadEnvFile": envTmp,
+                    "loadConsole": false,
+                    "loadEnv": false
+                });
+
+            }).then(() => {
+
+                strictEqual(conf.get("key_after_bad_line"), "value");
+                strictEqual(conf.size, 1);
+                strictEqual(conf.has("not a valid env line"), false);
+
+            });
+
+        });
+
         it("should reject when env file path does not exist", () => {
 
             const missing = join(__dirname, "utils", "2_6_definitely_missing_env.env");
