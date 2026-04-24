@@ -87,13 +87,13 @@ export default class ConfManager extends NodeContainerPattern {
 
         }
 
-        merge(this.skeletons as Record<string, unknown>);
-        merge(this.limits as Record<string, unknown>);
-        merge(this.mins as Record<string, unknown>);
-        merge(this.maxs as Record<string, unknown>);
-        merge(this.regexs as Record<string, unknown>);
-        merge(this.documentations as Record<string, unknown>);
-        merge(this.shortcuts as Record<string, unknown>);
+        merge(this.skeletons);
+        merge(this.limits);
+        merge(this.mins);
+        merge(this.maxs);
+        merge(this.regexs);
+        merge(this.documentations);
+        merge(this.shortcuts);
 
         return out;
 

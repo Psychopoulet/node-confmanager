@@ -603,7 +603,7 @@ describe("load", () => {
 
             }).then(() => {
 
-                strictEqual(conf.get("eqkey"), "a");
+                strictEqual(conf.get("eqkey"), "a=b=c");
 
             });
 
