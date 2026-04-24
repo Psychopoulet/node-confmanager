@@ -143,6 +143,8 @@ export default class ConfManager extends NodeContainerPattern {
                         reject(new Error(String(e)));
                     }
 
+                    rl.close();
+
                 }
 
             });
