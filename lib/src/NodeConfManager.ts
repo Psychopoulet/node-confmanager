@@ -122,13 +122,13 @@ export default class ConfManager extends NodeContainerPattern {
                     return;
                 }
 
-                const [ key, value ]: string[] = line.split("=");
+                const [ key, ...values ]: string[] = line.split("=");
                 const canonical = allow.get(key.trim().toLowerCase());
 
                 try {
 
                     if (undefined !== canonical) {
-                        this.set(canonical, value);
+                        this.set(canonical, values.join("="));
                     }
 
                 }
