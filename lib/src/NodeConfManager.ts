@@ -63,58 +63,19 @@ export default class ConfManager extends NodeContainerPattern {
 
     // private
 
-    /**
-     * Keys allowed for process.env / env-file loading: union of schema registrations
-     * plus shortcut names that point at a registered key.
-     * Lowercase env names map to the canonical registered key (first match wins: skeletons, then limits, mins, maxs, regexs, documentations).
-     */
-    private _registeredEnvKeyByLower (): Map<string, string> {
-
-        const out: Map<string, string> = new Map<string, string>();
-
-        function merge (record: Record<string, unknown>): void {
-
-            for (const k of Object.keys(record)) {
-
-                const trimmed = k.trim();
-                const lower = trimmed.toLowerCase();
-
-                if (!out.has(lower)) {
-                    out.set(lower, trimmed);
-                }
-
-            }
-
-        }
-
-        merge(this.skeletons);
-        merge(this.limits);
-        merge(this.mins);
-        merge(this.maxs);
-        merge(this.regexs);
-        merge(this.documentations);
-        merge(this.shortcuts);
-
-        return out;
-
-    }
-
     private _loadFromEnvFile (file: string): Promise<void> {
 
         return new Promise((resolve: () => void, reject: (error: Error) => void) => {
 
-            let stop = false;
-            const allow = this._registeredEnvKeyByLower();
-
-            const input = createReadStream(file);
+            let stop: boolean = false;
 
             // To stop reading early from inside "line", call rl.close(); "close" then fires and the Promise resolves.
             const rl = createInterface({
-                "input": input,
+                "input": createReadStream(file),
                 "crlfDelay": Infinity
             });
 
-            rl.on("line", (l: string) => {
+            rl.on("line", (l: string): void => {
 
                 const line: string = l.trim();
 
@@ -123,14 +84,9 @@ export default class ConfManager extends NodeContainerPattern {
                 }
 
                 const [ key, ...values ]: string[] = line.split("=");
-                const canonical = allow.get(key.trim().toLowerCase());
 
                 try {
-
-                    if (undefined !== canonical) {
-                        this.set(canonical, values.join("="));
-                    }
-
+                    this.set(key.trim().toLowerCase(), values.join("="));
                 }
                 catch (e: unknown) {
 
@@ -173,14 +129,25 @@ export default class ConfManager extends NodeContainerPattern {
 
     private _loadFromEnv (): void {
 
-        const allow = this._registeredEnvKeyByLower();
+        const allowedKeys: string[] = [
+            ...new Set<string>(
+                Object.keys(this.skeletons).concat(
+                    Object.keys(this.limits),
+                    Object.keys(this.mins),
+                    Object.keys(this.maxs),
+                    Object.keys(this.documentations),
+                    Object.keys(this.regexs),
+                    Object.keys(this.shortcuts)
+                )
+            )
+        ];
 
         Object.keys(process.env).forEach((key: string): void => {
 
-            const canonical = allow.get(key.trim().toLowerCase());
+            const validKey: string = key.trim().toLowerCase();
 
-            if (undefined !== canonical) {
-                this.set(canonical, process.env[key]);
+            if (allowedKeys.includes(validKey)) {
+                this.set(validKey, process.env[key]);
             }
 
         });
