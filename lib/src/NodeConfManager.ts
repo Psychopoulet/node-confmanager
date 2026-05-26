@@ -29,15 +29,11 @@ export default class ConfManager extends NodeContainerPattern {
 
     // constructor
 
-    public constructor (filePath: string, spaces: boolean = false, recursionSeparator: string = ".") {
+    public constructor (filePath: string = "", spaces: boolean = false, recursionSeparator: string = ".") {
 
         if ("undefined" !== typeof filePath && "string" !== typeof filePath) {
             throw new TypeError("\"filePath\" parameter is not a string");
         }
-        else if ("string" === typeof filePath && "" === filePath.trim()) {
-            throw new RangeError("\"filePath\" parameter is empty");
-        }
-
         else if ("undefined" !== typeof spaces && "boolean" !== typeof spaces) {
             throw new TypeError("The \"spaces\" parameter is not a boolean");
         }
@@ -53,7 +49,7 @@ export default class ConfManager extends NodeContainerPattern {
 
             super(recursionSeparator);
 
-            this.filePath = "undefined" !== typeof filePath ? filePath.trim() : "";
+            this.filePath = "string" === typeof filePath ? filePath.trim() : "";
             this.spaces = spaces;
             this.shortcuts = {};
 

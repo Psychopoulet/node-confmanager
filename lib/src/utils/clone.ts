@@ -5,7 +5,7 @@ export default function clone <T> (from: T): T {
     if ("object" === typeof from && null !== from) {
 
         if (Object === from.constructor) {
-            return { ...from } as T;
+            return { ...from };
         }
         else if (Array.isArray(from)) {
             return [ ...from ] as T;
