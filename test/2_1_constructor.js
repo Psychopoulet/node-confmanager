@@ -2,7 +2,7 @@
 
     // natives
     const { join } = require("node:path");
-    const { throws } = require("node:assert");
+    const { throws, doesNotThrow } = require("node:assert");
 
     // locals
     const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
@@ -13,13 +13,17 @@ describe("constructor", () => {
 
     it("should check filePath", () => {
 
+        doesNotThrow(() => {
+            new NodeConfManager().clear();
+        }, "check 'filePath' type value throws an error");
+
         throws(() => {
             new NodeConfManager(false).clear();
         }, TypeError, "check 'filePath' type value does not throw an error");
 
-        throws(() => {
+        doesNotThrow(() => {
             new NodeConfManager("").clear();
-        }, Error, "check 'filePath' type value does not throw an error");
+        }, "check 'filePath' type value throws an error");
 
     });
 
