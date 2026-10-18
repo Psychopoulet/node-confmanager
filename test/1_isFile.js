@@ -5,7 +5,7 @@
     const { strictEqual, ok } = require("node:assert");
 
     // locals
-    const isFile = require(join(__dirname, "..", "lib", "cjs", "utils", "isFile.js")).default;
+    const isFile = require(join(__dirname, "..", "lib", "src", "utils", "isFile.ts")).default;
 
 // tests
 

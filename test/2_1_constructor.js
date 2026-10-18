@@ -5,7 +5,7 @@
     const { throws, doesNotThrow } = require("node:assert");
 
     // locals
-    const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
+    const NodeConfManager = require(join(__dirname, "..", "lib", "src", "main.cts"));
 
 // tests
 

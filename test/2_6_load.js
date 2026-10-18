@@ -6,8 +6,8 @@
     const { strictEqual, deepStrictEqual, ok } = require("node:assert");
 
     // locals
-    const NodeConfManager = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
-    const clone = require(join(__dirname, "..", "lib", "cjs", "utils", "clone.js")).default;
+    const NodeConfManager = require(join(__dirname, "..", "lib", "src", "main.cts"));
+    const clone = require(join(__dirname, "..", "lib", "src", "utils", "clone.ts")).default;
 
 // consts
 
@@ -29,6 +29,7 @@
             [
                 "extension",
                 "reporter",
+                "require",
                 "slow",
                 "timeout",
                 "ui"
