@@ -5,7 +5,7 @@
     const { strictEqual } = require("node:assert");
 
     // locals
-    const clone = require(join(__dirname, "..", "lib", "cjs", "utils", "clone.js")).default;
+    const clone = require(join(__dirname, "..", "lib", "src", "utils", "clone.ts")).default;
 
 // tests
 

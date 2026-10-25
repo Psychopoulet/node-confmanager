@@ -5,7 +5,7 @@
     const { throws, strictEqual } = require("node:assert");
 
     // locals
-    const checkShortcut = require(join(__dirname, "..", "lib", "cjs", "utils", "checkShortcut.js")).default;
+    const checkShortcut = require(join(__dirname, "..", "lib", "src", "utils", "checkShortcut.ts")).default;
 
 // tests
 
