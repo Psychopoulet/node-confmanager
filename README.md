@@ -16,7 +16,7 @@ A configuration manager.
 ## Installation
 
 ```bash
-$ npm install node-confmanager
+$ bun add node-confmanager
 ```
 
 ## Features
@@ -82,7 +82,7 @@ await conf.set("name", "app").save();
 ## Tests
 
 ```bash
-npm run tests
+bun run tests
 ```
 
 ## License

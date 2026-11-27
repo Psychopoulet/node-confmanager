@@ -889,4 +889,81 @@ describe("load", () => {
 
     });
 
+    describe("default and boolean options", () => {
+
+        const argv = clone((0, process).argv);
+
+        afterEach(() => {
+            (0, process).argv = clone(argv);
+        });
+
+        it("should use the default load options", () => {
+
+            const conf = new NodeConfManager();
+
+            (0, process).argv = [
+                argv[0],
+                argv[1],
+                "--marker",
+                "from_default"
+            ];
+            conf.skeleton("marker", "string");
+
+            return conf.load().then(() => {
+                strictEqual(conf.get("marker"), "from_default");
+            });
+
+        });
+
+        it("should load from the console when the option is true", () => {
+
+            const conf = new NodeConfManager();
+
+            (0, process).argv = [
+                argv[0],
+                argv[1],
+                "--marker",
+                "from_flag"
+            ];
+            conf.skeleton("marker", "string");
+
+            return conf.load(true).then(() => {
+                strictEqual(conf.get("marker"), "from_flag");
+            });
+
+        });
+
+        it("should reject when an env file value does not match the skeleton", () => {
+
+            const conf = new NodeConfManager();
+            const envFile = join(__dirname, "utils", "2_6_invalid.env");
+
+            conf.skeleton("count", "integer");
+
+            return writeFile(envFile, "COUNT=nope\n", "utf-8").then(() => {
+
+                return conf.load({
+                    "loadEnvFile": envFile,
+                    "loadConsole": false,
+                    "loadEnv": false
+                });
+
+            }).then(() => {
+
+                return unlink(envFile).then(() => {
+                    throw new Error("No error generated");
+                });
+
+            }, (err) => {
+
+                return unlink(envFile).then(() => {
+                    strictEqual(err instanceof TypeError, true);
+                });
+
+            });
+
+        });
+
+    });
+
 });
