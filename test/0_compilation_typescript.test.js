@@ -5,10 +5,6 @@
     const { join } = require("node:path");
     const { unlink } = require("node:fs/promises");
 
-// consts
-
-    const MAX_TIMEOUT = 10000;
-
 // tests
 
 describe("compilation typescript", () => {
@@ -24,7 +20,7 @@ describe("compilation typescript", () => {
             return new Promise((resolve, reject) => {
 
                 const args = [
-                    "npx tsc",
+                    "bunx tsc",
                     join(__dirname, "typescript", "compilation.cts"),
                     "--target es6",
                     "--module commonjs",
@@ -42,12 +38,12 @@ describe("compilation typescript", () => {
 
             });
 
-        }).timeout(MAX_TIMEOUT);
+        });
 
         it("should exec compiled typescript file", (done) => {
 
             const args = [
-                "node",
+                "bun",
                 join(__dirname, "typescript", "compilation.cjs")
             ];
 
